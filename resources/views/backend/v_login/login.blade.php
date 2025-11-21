@@ -10,7 +10,7 @@
     <meta name="robots" content="noindex,nofollow" />
     <title>Login - SIMA stok</title>
 
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend/image/icon_univ_bsi.png') }}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend/image/sima.png') }}" />
 
     <style>
       * {
