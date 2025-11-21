@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash; // Tambahan untuk hashing password jika diperlukan nanti
 
 class UserController extends Controller
 {
@@ -19,33 +18,32 @@ class UserController extends Controller
                 $query->where('nama', 'like', "%{$search}%")
                       ->orWhere('email', 'like', "%{$search}%");
             })
-            ->orderBy('nama', 'asc') // Mengurutkan berdasarkan nama
+            ->orderBy('nama', 'asc')
             ->get();
 
         return view('backend.v_user.index', compact('judul', 'index'));
     }
 
-    // Fungsi create (Halaman Tambah User)
+    // Form tambah user
     public function create()
     {
         $judul = 'Tambah User';
         return view('backend.v_user.create', compact('judul'));
     }
 
-    // Fungsi store (Menyimpan User Baru)
+    // Simpan user baru
     public function store(Request $request)
     {
         $request->validate([
             'nama' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:user,email', // Ganti users menjadi user
             'password' => 'required|min:6',
             'role' => 'required',
             'status' => 'required',
-            'hp' => 'required', // Validasi HP
-            'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:2048', // Validasi Foto
+            'hp' => 'required',
+            'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
-        // Persiapan data
         $data = [
             'nama' => $request->nama,
             'email' => $request->email,
@@ -68,7 +66,7 @@ class UserController extends Controller
         return redirect()->route('backend.user.index')->with('success', 'User berhasil ditambahkan');
     }
 
-    // Fungsi edit (Halaman Edit User)
+    // Edit user
     public function edit($id)
     {
         $judul = 'Ubah User';
@@ -76,18 +74,18 @@ class UserController extends Controller
         return view('backend.v_user.edit', compact('judul', 'user'));
     }
 
-    // Fungsi update (Menyimpan Perubahan User)
+    // Update user
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
         $request->validate([
             'nama' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'email' => 'required|email|unique:user,email,' . $id, // Ganti users menjadi user
             'role' => 'required',
-            'status' => 'required', // Field ini wajib ada di form
-            'hp' => 'required',     // Validasi HP
-            'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:2048', // Validasi Foto
+            'status' => 'required', 
+            'hp' => 'required', 
+            'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:2048', 
         ]);
 
         // Data yang akan diupdate
@@ -96,7 +94,7 @@ class UserController extends Controller
             'email' => $request->email,
             'role' => $request->role,
             'status' => $request->status,
-            'hp' => $request->hp,
+            'hp' => $request->hp, 
         ];
 
         // Proses Update Foto
@@ -121,7 +119,7 @@ class UserController extends Controller
         return redirect()->route('backend.user.index')->with('success', 'User berhasil diubah');
     }
 
-    // Fungsi destroy (Hapus User)
+    // Hapus user
     public function destroy($id)
     {
         $user = User::findOrFail($id);
