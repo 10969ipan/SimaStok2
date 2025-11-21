@@ -28,8 +28,8 @@
                         <label for="role" class="form-label">Hak Akses</label>
                         <select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
                             <option value="" disabled>-- Pilih Hak Akses --</option>
-                            <option value="1" {{ old('role', $user->role) == 1 ? 'selected' : '' }}>Super Admin</option>
-                            <option value="0" {{ old('role', $user->role) == 0 ? 'selected' : '' }}>Admin</option>
+                            <option value="1" {{ old('role', $user->role) == 1 ? 'selected' : '' }}>Admin</option>
+                            <option value="0" {{ old('role', $user->role) == 0 ? 'selected' : '' }}>User</option>
                         </select>
                         @error('role')
                             <div class="invalid-feedback">{{ $message }}</div>

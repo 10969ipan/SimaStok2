@@ -75,13 +75,14 @@ class UserController extends Controller
     }
 
     // Update user
+    // Update user
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
         $request->validate([
             'nama' => 'required',
-            'email' => 'required|email|unique:user,email,' . $id, // Ganti users menjadi user
+            'email' => 'required|email|unique:user,email,' . $id,
             'role' => 'required',
             'status' => 'required', 
             'hp' => 'required', 
@@ -116,7 +117,8 @@ class UserController extends Controller
         // Update database
         $user->update($data);
 
-        return redirect()->route('backend.user.index')->with('success', 'User berhasil diubah');
+        // PERBAIKAN: Mengarahkan ke halaman beranda utama (backend.beranda)
+        return redirect()->route('backend.beranda')->with('success', 'User berhasil diubah'); //
     }
 
     // Hapus user

@@ -53,7 +53,8 @@ class KategoriController extends Controller
         $validatedData = $request->validate($rules);
 
         $kategori->update($validatedData);
-        return redirect()->route('backend.kategori.index')->with('success', 'Data berhasil diperbaharui');
+        // PERBAIKAN: Mengarahkan ke halaman beranda utama (backend.beranda)
+        return redirect()->route('backend.beranda')->with('success', 'Data berhasil diperbaharui'); //
     }
 
     public function destroy($id)

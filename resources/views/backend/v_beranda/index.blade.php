@@ -7,7 +7,7 @@
                 <h5 class="card-title">Halo, {{ Auth::user()->nama }}!</h5>
                 <div class="alert alert-info" role="alert">
                     <h4 class="alert-heading">Selamat Datang di SimaStok</h4>
-                    <p>Anda login sebagai <strong>{{ Auth::user()->role == 1 ? 'Super Admin' : 'Admin' }}</strong>. Silakan gunakan menu di sidebar untuk mengelola data.</p>
+                    <p>Anda login sebagai <strong>{{ Auth::user()->role == 1 ? 'Admin' : 'User' }}</strong>. Silakan gunakan menu di sidebar untuk mengelola data.</p>
                 </div>
             </div>
         </div>
