@@ -1,6 +1,5 @@
 @extends('backend.v_layouts.app')
 @section('content')
-<!-- contentAwal -->
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card">
@@ -12,11 +11,12 @@
                     @csrf
                     @method('PUT')
                     
-                    <!-- Foto -->
                     <div class="mb-3">
                         <label for="foto" class="form-label">Foto</label>
                         @if($user->foto)
-                            <img src="{{ asset('uploads/user/' . $user->foto) }}" class="img-thumbnail mb-2" style="max-width: 150px;">
+                            <div class="mb-2">
+                                <img src="{{ asset('uploads/user/' . $user->foto) }}" class="img-thumbnail" style="max-width: 150px;">
+                            </div>
                         @endif
                         <input type="file" name="foto" id="foto" class="form-control @error('foto') is-invalid @enderror">
                         @error('foto')
@@ -24,19 +24,30 @@
                         @enderror
                     </div>
 
-                    <!-- Hak Akses -->
                     <div class="mb-3">
                         <label for="role" class="form-label">Hak Akses</label>
                         <select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
-                            <option value="1" {{ $user->role == 1 ? 'selected' : '' }}>Super Admin</option>
-                            <option value="0" {{ $user->role == 0 ? 'selected' : '' }}>Admin</option>
+                            <option value="" disabled>-- Pilih Hak Akses --</option>
+                            <option value="1" {{ old('role', $user->role) == 1 ? 'selected' : '' }}>Super Admin</option>
+                            <option value="0" {{ old('role', $user->role) == 0 ? 'selected' : '' }}>Admin</option>
                         </select>
                         @error('role')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <!-- Nama -->
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select name="status" id="status" class="form-control @error('status') is-invalid @enderror">
+                            <option value="" disabled>-- Pilih Status --</option>
+                            <option value="1" {{ old('status', $user->status) == 1 ? 'selected' : '' }}>Aktif</option>
+                            <option value="0" {{ old('status', $user->status) == 0 ? 'selected' : '' }}>Non Aktif</option>
+                        </select>
+                        @error('status')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="mb-3">
                         <label for="nama" class="form-label">Nama</label>
                         <input type="text" name="nama" id="nama" value="{{ old('nama', $user->nama) }}" class="form-control @error('nama') is-invalid @enderror">
@@ -45,7 +56,6 @@
                         @enderror
                     </div>
 
-                    <!-- Email -->
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" class="form-control @error('email') is-invalid @enderror">
@@ -54,7 +64,6 @@
                         @enderror
                     </div>
 
-                    <!-- HP -->
                     <div class="mb-3">
                         <label for="hp" class="form-label">Nomor HP</label>
                         <input type="text" name="hp" id="hp" value="{{ old('hp', $user->hp) }}" class="form-control @error('hp') is-invalid @enderror" onkeypress="return hanyaAngka(event)">
@@ -63,15 +72,15 @@
                         @enderror
                     </div>
 
-                    <!-- Tombol -->
-                    <button type="submit" class="btn btn-success">Update</button>
-                    <a href="{{ route('backend.user.index') }}" class="btn btn-secondary">Kembali</a>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-success">Update</button>
+                        <a href="{{ route('backend.user.index') }}" class="btn btn-secondary">Kembali</a>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<!-- contentAkhir -->
 @endsection
 
 @section('scripts')
