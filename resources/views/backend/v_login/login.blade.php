@@ -323,23 +323,9 @@
     <div class="login-wrapper">
       <!-- Left Side -->
       <div class="left-side">
-        <div class="diagonal-shape"></div>
+        <div class="diagonal-shape" style="background: linear-gradient(135deg, #355db3ff 0%, #2d4373 100%)"></div>
         <div class="logo-container">
-          <div class="logo-circle">
-            <div class="logo-icon">
-              <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Box/Package Icon -->
-                <rect x="30" y="45" width="60" height="45" fill="#2563eb" opacity="0.3"/>
-                <path d="M60 30 L90 45 L90 75 L60 90 L30 75 L30 45 Z" fill="#2563eb" opacity="0.5"/>
-                <path d="M60 30 L60 60 L90 75" stroke="#2563eb" stroke-width="3" fill="none"/>
-                <path d="M60 60 L30 75" stroke="#2563eb" stroke-width="3" fill="none"/>
-                <!-- Arrow Up -->
-                <path d="M75 15 L90 30 L82 30 L82 42 L68 42 L68 30 L60 30 Z" fill="#2563eb"/>
-              </svg>
-            </div>
-            <div class="logo-text">SIMA</div>
-            <div class="logo-subtext">stok</div>
-          </div>
+          <img src="{{ asset('backend/image/sima.png') }}" alt="SimaStok Logo" style="max-height: 600px; width: auto; margin-bottom: 50px;">   
         </div>
       </div>
 

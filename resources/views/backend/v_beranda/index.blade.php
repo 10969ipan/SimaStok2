@@ -11,7 +11,6 @@
                             <div class="dot-indicator bg-success mr-2"></div>
                             <p class="mb-0">Selamat Datang, <strong>{{ Auth::user()->nama }}</strong>!</p>
                         </div>
-                        <h4 class="card-title mb-0">Dashboard SimaStok</h4>
                         <p class="text-muted">Anda login sebagai <strong>{{ Auth::user()->role == 1 ? 'Admin' : 'User' }}</strong>.</p>
                     </div>
                 </div>

@@ -1,228 +1,205 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
+ 
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="WP2, Toko Online, Laravel" />
-    <meta name="author" content="ANAK BAIK" />
-    <title>SimaStok - Toko Online</title>
+    <meta name="author" content="SimaStok" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <link rel="stylesheet" href="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/vendors/iconfonts/ionicons/dist/css/ionicons.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/vendors/iconfonts/flag-icon-css/css/flag-icon.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/vendors/css/vendor.bundle.base.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/vendors/css/vendor.bundle.addons.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/css/shared/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/css/demo_1/style.css') }}">
+    <title>SimaStok - {{ $judul ?? 'Dashboard' }}</title>
+    
     <link rel="shortcut icon" href="{{ asset('backend/image/sima.png') }}" />
 
-    {{-- Kustomisasi Gaya untuk Sidebar Putih --}}
-    <style>
-        /* Mengubah latar belakang sidebar menjadi putih */
-        .sidebar {
-            background-color: #ffffff !important;
-        }
-        /* Mengubah warna teks dan ikon di sidebar menjadi gelap agar terbaca */
-        .sidebar .nav .nav-item .nav-link .menu-title,
-        .sidebar .nav .nav-item .nav-link .menu-icon {
-            color: #212529 !important; 
-        }
-        /* Mengubah latar belakang item menu aktif menjadi abu-abu terang */
-        .sidebar .nav .nav-item.active > .nav-link {
-            background: #f1f1f1 !important; 
-            border-left: 3px solid #695acb; /* Menggunakan warna aksen yang diasumsikan */
-        }
-        /* Mengubah warna teks dan ikon item menu aktif kembali ke warna aksen */
-        .sidebar .nav .nav-item.active > .nav-link .menu-title,
-        .sidebar .nav .nav-item.active > .nav-link .menu-icon {
-            color: #695acb !important; 
-        }
-        /* Memastikan warna teks untuk submenu juga gelap */
-        .sidebar .nav .nav-item .collapse .nav-item .nav-link {
-            color: #495057 !important;
-        }
-        .sidebar .nav .nav-item .collapse .nav-item.active .nav-link {
-            color: #695acb !important;
-        }
-        /* Memastikan warna teks berubah saat hover */
-        .sidebar .nav .nav-item .nav-link:hover,
-        .sidebar .nav .nav-item .nav-link:focus {
-            color: #695acb !important;
-        }
-    </style>
-  </head>
-  <body>
-    <div class="container-scroller">
-      
-      <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-        <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-          <a class="navbar-brand brand-logo" href="{{ route('backend.beranda') }}">
-            <img src="{{ asset('backend/image/sima.png') }}"  style="width: 30px; height: auto;" /> 
-            <span class="font-weight-bold text-black ml-2" style="font-size: 20px;">SimaStok</span>
-          </a>
-          <a class="navbar-brand brand-logo-mini" href="{{ route('backend.beranda') }}">
-            <img src="{{ asset('backend/image/sima.png') }}" style="width: 30px; height: auto;" />
-          </a>
+    <link rel="stylesheet" href="{{ asset('backend/concept-master/assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link href="{{ asset('backend/concept-master/assets/vendor/fonts/circular-std/style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('backend/concept-master/assets/libs/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/concept-master/assets/vendor/fonts/fontawesome/css/fontawesome-all.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/concept-master/assets/vendor/charts/chartist-bundle/chartist.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/concept-master/assets/vendor/charts/morris-bundle/morris.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/concept-master/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/concept-master/assets/vendor/charts/c3charts/c3.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/concept-master/assets/vendor/fonts/flag-icon-css/flag-icon.min.css') }}">
+    
+    @stack('styles')
+</head>
+
+<body>
+    <div class="dashboard-main-wrapper">
+        <div class="dashboard-header">
+            <nav class="navbar navbar-expand-lg bg-white fixed-top">
+                <a class="navbar-brand" href="{{ route('backend.beranda') }}">
+                    <img src="{{ asset('backend/image/sima.png') }}" style="width: 50px; height: auto; margin-right: 10px;" alt="Logo">
+                    SimaStok
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto navbar-right-top">
+                        <li class="nav-item">
+                            <div id="custom-search" class="top-search-bar">
+                                <input class="form-control" type="text" placeholder="Cari data..">
+                            </div>
+                        </li>
+
+                        <li class="nav-item dropdown nav-user">
+                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="{{ asset('backend/concept-master/assets/images/avatar-1.jpg') }}" alt="" class="user-avatar-md rounded-circle">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                                <div class="nav-user-info">
+                                    <h5 class="mb-0 text-white nav-user-name">{{ Auth::user()->nama ?? 'User' }}</h5>
+                                    <span class="status"></span><span class="ml-2">Online</span>
+                                </div>
+                                <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Profil Saya</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Pengaturan</a>
+                                
+                                <form action="{{ route('backend.logout') }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger" style="cursor: pointer; background: none; border: none; width: 100%; text-align: left;">
+                                        <i class="fas fa-power-off mr-2"></i>Logout
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </div>
-        <div class="navbar-menu-wrapper d-flex align-items-center">
-          
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown d-none d-xl-inline-block user-dropdown">
-              <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-                <span class="profile-text">Halo, {{ Auth::user()->nama ?? 'User' }} !</span>
-                
-              </a>
-              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
-                <div class="dropdown-header text-center">
-                  
-                  <p class="mb-1 mt-3 font-weight-semibold">{{ Auth::user()->nama ?? 'User' }}</p>
-                  <p class="font-weight-light text-muted mb-0">{{ Auth::user()->email ?? '' }}</p>
-                </div>
-                <a class="dropdown-item">Profil Saya <i class="dropdown-item-icon ti-user"></i></a>
-                
-                <form action="{{ route('backend.logout') }}" method="POST" class="d-inline">
-                    @csrf
-                    <button type="submit" class="dropdown-item text-danger">Sign Out <i class="dropdown-item-icon ti-power-off"></i></button>
-                </form>
-              </div>
-            </li>
-          </ul>
-          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-            <span class="mdi mdi-menu"></span>
-          </button>
+        <div class="nav-left-sidebar sidebar-dark">
+            <div class="menu-list">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav flex-column">
+                            <li class="nav-divider">
+                                Menu Utama
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('backend/beranda') ? 'active' : '' }}" href="{{ route('backend.beranda') }}">
+                                    <i class="fa fa-fw fa-user-circle"></i>Dashboard
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('backend/user*', 'backend/supplier*', 'backend/pelanggan*', 'backend/bahan_baku*') ? 'active' : '' }}" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-master" aria-controls="submenu-master">
+                                    <i class="fa fa-fw fa-database"></i>Master Data
+                                </a>
+                                <div id="submenu-master" class="collapse submenu {{ request()->is('backend/user*', 'backend/supplier*', 'backend/pelanggan*', 'backend/bahan_baku*') ? 'show' : '' }}" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ request()->routeIs('backend.user.index') ? 'active' : '' }}" href="{{ route('backend.user.index') }}">User</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ request()->routeIs('backend.supplier.index') ? 'active' : '' }}" href="{{ route('backend.supplier.index') }}">Supplier</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ request()->routeIs('backend.pelanggan.index') ? 'active' : '' }}" href="{{ route('backend.pelanggan.index') }}">Pelanggan</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ request()->routeIs('backend.bahan_baku.index') ? 'active' : '' }}" href="{{ route('backend.bahan_baku.index') }}">Bahan Baku</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('backend/kategori*', 'backend/produk*', 'backend/desain_koleksi*') ? 'active' : '' }}" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-katalog" aria-controls="submenu-katalog">
+                                    <i class="fas fa-fw fa-tag"></i>Katalog Produk
+                                </a>
+                                <div id="submenu-katalog" class="collapse submenu {{ request()->is('backend/kategori*', 'backend/produk*', 'backend/desain_koleksi*') ? 'show' : '' }}" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ request()->routeIs('backend.kategori.index') ? 'active' : '' }}" href="{{ route('backend.kategori.index') }}">Kategori</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ request()->routeIs('backend.produk.index') ? 'active' : '' }}" href="{{ route('backend.produk.index') }}">Produk Utama</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ request()->routeIs('backend.produk_fashion.index') ? 'active' : '' }}" href="{{ route('backend.produk_fashion.index') }}">Produk Fashion</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ request()->routeIs('backend.desain_koleksi.index') ? 'active' : '' }}" href="{{ route('backend.desain_koleksi.index') }}">Desain Koleksi</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('backend/produksi*', 'backend/penjualan*') ? 'active' : '' }}" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-transaksi" aria-controls="submenu-transaksi">
+                                    <i class="fas fa-fw fa-shopping-cart"></i>Transaksi
+                                </a>
+                                <div id="submenu-transaksi" class="collapse submenu {{ request()->is('backend/produksi*', 'backend/penjualan*') ? 'show' : '' }}" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ request()->routeIs('backend.produksi.index') ? 'active' : '' }}" href="{{ route('backend.produksi.index') }}">Produksi</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ request()->routeIs('backend.penjualan.index') ? 'active' : '' }}" href="{{ route('backend.penjualan.index') }}">Penjualan</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('backend.laporan.index') ? 'active' : '' }}" href="{{ route('backend.laporan.index') }}">
+                                    <i class="fas fa-fw fa-file-alt"></i>Laporan
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </nav>
+            </div>
         </div>
-      </nav>
-      
-      <div class="container-fluid page-body-wrapper">
-        
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
-          <ul class="nav">
-            <li class="nav-item nav-profile">
-              
-
-            <li class="nav-item nav-category">Main Menu</li>
-            <li class="nav-item {{ request()->is('backend/beranda') ? 'active' : '' }}">
-              <a class="nav-link" href="{{ route('backend.beranda') }}">
-                {{-- PERUBAHAN: Mengganti ikon typcn-document-text dengan mdi-view-dashboard --}}
-                <i class="menu-icon mdi mdi-view-dashboard"></i>
-                <span class="menu-title">Dashboard</span>
-              </a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#ui-master" aria-expanded="false" aria-controls="ui-master">
-                {{-- PERUBAHAN: Mengganti ikon typcn-coffee dengan mdi-database --}}
-                <i class="menu-icon mdi mdi-database"></i>
-                <span class="menu-title">Master Data</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="ui-master">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ route('backend.user.index') }}">User</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ route('backend.supplier.index') }}">Supplier</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ route('backend.pelanggan.index') }}">Pelanggan</a>
-                  </li>
-                   <li class="nav-item">
-                    <a class="nav-link" href="{{ route('backend.bahan_baku.index') }}">Bahan Baku</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-
-             <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-katalog" aria-expanded="false" aria-controls="ui-katalog">
-                  {{-- PERUBAHAN: Mengganti ikon typcn-coffee dengan mdi-hanger (simbol pakaian/produk) --}}
-                  <i class="menu-icon mdi mdi-hanger"></i>
-                  <span class="menu-title">Katalog Produk</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-katalog">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{ route('backend.kategori.index') }}">Kategori</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{ route('backend.produk.index') }}">Produk Utama</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{ route('backend.produk_fashion.index') }}">Produk Fashion</a>
-                    </li>
-                     <li class="nav-item">
-                      <a class="nav-link" href="{{ route('backend.desain_koleksi.index') }}">Desain Koleksi</a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-transaksi" aria-expanded="false" aria-controls="ui-transaksi">
-                  {{-- PERUBAHAN: Mengganti ikon typcn-coffee dengan mdi-cart --}}
-                  <i class="menu-icon mdi mdi-cart"></i>
-                  <span class="menu-title">Transaksi</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-transaksi">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{ route('backend.produksi.index') }}">Produksi</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{ route('backend.penjualan.index') }}">Penjualan</a>
-                    </li>
-                  </ul>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('backend.laporan.index') }}">
-                  {{-- PERUBAHAN: Mengganti ikon typcn-bell dengan mdi-file-document-box-outline --}}
-                  <i class="menu-icon mdi mdi-file-document-box-outline"></i>
-                  <span class="menu-title">Laporan</span>
-                </a>
-            </li>
-
-          </ul>
-        </nav>
-        
-        <div class="main-panel">
-          <div class="content-wrapper">
-            
-            <div class="row page-title-header">
-                <div class="col-12">
-                    <div class="page-header">
-                        <h4 class="page-title">{{ $judul ?? 'Dashboard' }}</h4>
-                        <div class="quick-link-wrapper w-100 d-md-flex flex-md-wrap">
-                            <ul class="quick-links ml-auto">
-                                <li><a href="{{ route('backend.beranda') }}">Home</a></li>
-                                <li><a href="#">{{ $judul ?? '' }}</a></li>
-                            </ul>
+        <div class="dashboard-wrapper">
+            <div class="container-fluid dashboard-content">
+                
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header">
+                            <h2 class="pageheader-title">{{ $judul ?? 'Halaman' }}</h2>
+                            <p class="pageheader-text">Sistem Informasi Manajemen Stok.</p>
+                            <div class="page-breadcrumb">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{{ route('backend.beranda') }}" class="breadcrumb-link">SimaStok</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">{{ $judul ?? '' }}</li>
+                                    </ol>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
+                @yield('content')
+                </div>
+            
+            
             </div>
-
-            @yield('content')
-
-          </div>
-          <footer class="footer">
-            <div class="container-fluid clearfix">
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2025 <a href="https://www.instagram.com/10969ipan" target="_blank">SimaStok</a>. All rights reserved.</span>
-              
-            </div>
-          </footer>
-          </div>
         </div>
-      </div>
-    <script src="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/vendors/js/vendor.bundle.base.js') }}"></script>
-    <script src="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/vendors/js/vendor.bundle.addons.js') }}"></script>
-    <script src="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/js/shared/off-canvas.js') }}"></script>
-    <script src="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/js/shared/misc.js') }}"></script>
-    <script src="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/js/demo_1/dashboard.js') }}"></script>
+    <script src="{{ asset('backend/concept-master/assets/vendor/jquery/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ asset('backend/concept-master/assets/vendor/bootstrap/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('backend/concept-master/assets/vendor/slimscroll/jquery.slimscroll.js') }}"></script>
+    <script src="{{ asset('backend/concept-master/assets/libs/js/main-js.js') }}"></script>
+    
+    @if(request()->is('backend/beranda'))
+        <script src="{{ asset('backend/concept-master/assets/vendor/charts/chartist-bundle/chartist.min.js') }}"></script>
+        <script src="{{ asset('backend/concept-master/assets/vendor/charts/sparkline/jquery.sparkline.js') }}"></script>
+        <script src="{{ asset('backend/concept-master/assets/vendor/charts/morris-bundle/raphael.min.js') }}"></script>
+        <script src="{{ asset('backend/concept-master/assets/vendor/charts/morris-bundle/morris.js') }}"></script>
+        <script src="{{ asset('backend/concept-master/assets/vendor/charts/c3charts/c3.min.js') }}"></script>
+        <script src="{{ asset('backend/concept-master/assets/vendor/charts/c3charts/d3-5.4.0.min.js') }}"></script>
+        <script src="{{ asset('backend/concept-master/assets/vendor/charts/c3charts/C3chartjs.js') }}"></script>
+        <script src="{{ asset('backend/concept-master/assets/libs/js/dashboard-ecommerce.js') }}"></script>
+    @endif
+
     @stack('scripts')
-  </body>
+</body>
+ 
 </html>
