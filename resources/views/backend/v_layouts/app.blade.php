@@ -22,11 +22,11 @@
       <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
           <a class="navbar-brand brand-logo" href="{{ route('backend.beranda') }}">
-            <img src="{{ asset('backend/image/sima.png') }}" alt="logo" style="width: 30px; height: auto;" /> 
+            <img src="{{ asset('backend/image/sima.png') }}"  style="width: 30px; height: auto;" /> 
             <span class="font-weight-bold text-black ml-2" style="font-size: 20px;">SimaStok</span>
           </a>
           <a class="navbar-brand brand-logo-mini" href="{{ route('backend.beranda') }}">
-            <img src="{{ asset('backend/image/sima.png') }}" alt="logo" />
+            <img src="{{ asset('backend/image/sima.png') }}" style="width: 30px; height: auto;" />
           </a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-center">
@@ -68,14 +68,16 @@
             <li class="nav-item nav-category">Main Menu</li>
             <li class="nav-item {{ request()->is('backend/beranda') ? 'active' : '' }}">
               <a class="nav-link" href="{{ route('backend.beranda') }}">
-                <i class="menu-icon typcn typcn-document-text"></i>
+                {{-- PERUBAHAN: Mengganti ikon typcn-document-text dengan mdi-view-dashboard --}}
+                <i class="menu-icon mdi mdi-view-dashboard"></i>
                 <span class="menu-title">Dashboard</span>
               </a>
             </li>
             
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#ui-master" aria-expanded="false" aria-controls="ui-master">
-                <i class="menu-icon typcn typcn-coffee"></i>
+                {{-- PERUBAHAN: Mengganti ikon typcn-coffee dengan mdi-database --}}
+                <i class="menu-icon mdi mdi-database"></i>
                 <span class="menu-title">Master Data</span>
                 <i class="menu-arrow"></i>
               </a>
@@ -99,7 +101,8 @@
 
              <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#ui-katalog" aria-expanded="false" aria-controls="ui-katalog">
-                  <i class="menu-icon typcn typcn-coffee"></i>
+                  {{-- PERUBAHAN: Mengganti ikon typcn-coffee dengan mdi-hanger (simbol pakaian/produk) --}}
+                  <i class="menu-icon mdi mdi-hanger"></i>
                   <span class="menu-title">Katalog Produk</span>
                   <i class="menu-arrow"></i>
                 </a>
@@ -123,7 +126,8 @@
 
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#ui-transaksi" aria-expanded="false" aria-controls="ui-transaksi">
-                  <i class="menu-icon typcn typcn-coffee"></i>
+                  {{-- PERUBAHAN: Mengganti ikon typcn-coffee dengan mdi-cart --}}
+                  <i class="menu-icon mdi mdi-cart"></i>
                   <span class="menu-title">Transaksi</span>
                   <i class="menu-arrow"></i>
                 </a>
@@ -135,16 +139,20 @@
                     <li class="nav-item">
                       <a class="nav-link" href="{{ route('backend.penjualan.index') }}">Penjualan</a>
                     </li>
-                  </ul>
+                  </ul">
                 </div>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('backend.laporan.index') }}">
-                  <i class="menu-icon typcn typcn-bell"></i>
+                  {{-- PERUBAHAN: Mengganti ikon typcn-bell dengan mdi-file-document-box-outline --}}
+                  <i class="menu-icon mdi mdi-file-document-box-outline"></i>
                   <span class="menu-title">Laporan</span>
                 </a>
             </li>
+
+          </ul>
+        </nav>
 
           </ul>
         </nav>
@@ -172,7 +180,7 @@
           <footer class="footer">
             <div class="container-fluid clearfix">
               <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2025 <a href="https://www.instagram.com/10969ipan" target="_blank">SimaStok</a>. All rights reserved.</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
+              
             </div>
           </footer>
           </div>
