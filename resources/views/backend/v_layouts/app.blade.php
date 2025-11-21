@@ -15,6 +15,41 @@
     <link rel="stylesheet" href="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/css/shared/style.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/StarAdmin-Free-Bootstrap-Admin-Template-master/src/assets/css/demo_1/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('backend/image/sima.png') }}" />
+
+    {{-- Kustomisasi Gaya untuk Sidebar Putih --}}
+    <style>
+        /* Mengubah latar belakang sidebar menjadi putih */
+        .sidebar {
+            background-color: #ffffff !important;
+        }
+        /* Mengubah warna teks dan ikon di sidebar menjadi gelap agar terbaca */
+        .sidebar .nav .nav-item .nav-link .menu-title,
+        .sidebar .nav .nav-item .nav-link .menu-icon {
+            color: #212529 !important; 
+        }
+        /* Mengubah latar belakang item menu aktif menjadi abu-abu terang */
+        .sidebar .nav .nav-item.active > .nav-link {
+            background: #f1f1f1 !important; 
+            border-left: 3px solid #695acb; /* Menggunakan warna aksen yang diasumsikan */
+        }
+        /* Mengubah warna teks dan ikon item menu aktif kembali ke warna aksen */
+        .sidebar .nav .nav-item.active > .nav-link .menu-title,
+        .sidebar .nav .nav-item.active > .nav-link .menu-icon {
+            color: #695acb !important; 
+        }
+        /* Memastikan warna teks untuk submenu juga gelap */
+        .sidebar .nav .nav-item .collapse .nav-item .nav-link {
+            color: #495057 !important;
+        }
+        .sidebar .nav .nav-item .collapse .nav-item.active .nav-link {
+            color: #695acb !important;
+        }
+        /* Memastikan warna teks berubah saat hover */
+        .sidebar .nav .nav-item .nav-link:hover,
+        .sidebar .nav .nav-item .nav-link:focus {
+            color: #695acb !important;
+        }
+    </style>
   </head>
   <body>
     <div class="container-scroller">
@@ -139,7 +174,7 @@
                     <li class="nav-item">
                       <a class="nav-link" href="{{ route('backend.penjualan.index') }}">Penjualan</a>
                     </li>
-                  </ul">
+                  </ul>
                 </div>
             </li>
 
@@ -153,10 +188,7 @@
 
           </ul>
         </nav>
-
-          </ul>
-        </nav>
-
+        
         <div class="main-panel">
           <div class="content-wrapper">
             
