@@ -7,36 +7,83 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    // Fungsi index (Halaman Data User)
+    // Fungsi index (Halaman Data User dengan Pencarian)
     public function index(Request $request)
     {
         $judul = 'Data User';
-        $search = $request->input('search');
+        $query = User::query();
 
-        $index = User::query()
-            ->when($search, function ($query, $search) {
-                $query->where('nama', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%");
-            })
-            ->orderBy('nama', 'asc')
-            ->get();
+        // Logika Pencarian
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('hp', 'like', "%{$search}%"); // Opsional: cari by No HP juga
+            });
+        }
 
-        return view('backend.v_user.index', compact('judul', 'index'));
+        // Urutkan data (bisa berdasarkan nama atau updated_at)
+        $index = $query->orderBy('updated_at', 'desc')->get();
+
+        return view('backend.v_user.index', [
+            'judul' => $judul,
+            'index' => $index
+        ]);
     }
 
-    // Form tambah user
+    // ... (Biarkan method create, store, edit, destroy tetap seperti sebelumnya) ...
+
+    // NOTE: Perbaiki method update Anda yang redirect ke beranda
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'nama' => 'required',
+            'email' => 'required|email|unique:user,email,' . $id,
+            'role' => 'required',
+            'status' => 'required', 
+            'hp' => 'required', 
+            'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:2048', 
+        ]);
+
+        $data = [
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'role' => $request->role,
+            'status' => $request->status,
+            'hp' => $request->hp, 
+        ];
+
+        if ($request->hasFile('foto')) {
+            if ($user->foto && file_exists(public_path('uploads/user/' . $user->foto))) {
+                unlink(public_path('uploads/user/' . $user->foto));
+            }
+            $file = $request->file('foto');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/user'), $fileName);
+            $data['foto'] = $fileName;
+        }
+
+        $user->update($data);
+
+        // Ubah redirect kembali ke index user, bukan beranda
+        return redirect()->route('backend.user.index')->with('success', 'User berhasil diperbaharui');
+    }
+    
+    // ... (Method destroy tetap sama) ...
     public function create()
     {
         $judul = 'Tambah User';
         return view('backend.v_user.create', compact('judul'));
     }
 
-    // Simpan user baru
     public function store(Request $request)
     {
         $request->validate([
             'nama' => 'required',
-            'email' => 'required|email|unique:user,email', // Ganti users menjadi user
+            'email' => 'required|email|unique:user,email',
             'password' => 'required|min:6',
             'role' => 'required',
             'status' => 'required',
@@ -53,7 +100,6 @@ class UserController extends Controller
             'hp' => $request->hp,
         ];
 
-        // Proses Upload Foto (Jika ada)
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $fileName = time() . '.' . $file->getClientOriginalExtension();
@@ -66,7 +112,6 @@ class UserController extends Controller
         return redirect()->route('backend.user.index')->with('success', 'User berhasil ditambahkan');
     }
 
-    // Edit user
     public function edit($id)
     {
         $judul = 'Ubah User';
@@ -74,59 +119,10 @@ class UserController extends Controller
         return view('backend.v_user.edit', compact('judul', 'user'));
     }
 
-    // Update user
-    // Update user
-    public function update(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-
-        $request->validate([
-            'nama' => 'required',
-            'email' => 'required|email|unique:user,email,' . $id,
-            'role' => 'required',
-            'status' => 'required', 
-            'hp' => 'required', 
-            'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:2048', 
-        ]);
-
-        // Data yang akan diupdate
-        $data = [
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'role' => $request->role,
-            'status' => $request->status,
-            'hp' => $request->hp, 
-        ];
-
-        // Proses Update Foto
-        if ($request->hasFile('foto')) {
-            // 1. Hapus foto lama jika ada
-            if ($user->foto && file_exists(public_path('uploads/user/' . $user->foto))) {
-                unlink(public_path('uploads/user/' . $user->foto));
-            }
-
-            // 2. Upload foto baru
-            $file = $request->file('foto');
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/user'), $fileName);
-            
-            // 3. Masukkan nama file ke array data
-            $data['foto'] = $fileName;
-        }
-
-        // Update database
-        $user->update($data);
-
-        // PERBAIKAN: Mengarahkan ke halaman beranda utama (backend.beranda)
-        return redirect()->route('backend.beranda')->with('success', 'User berhasil diubah'); //
-    }
-
-    // Hapus user
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         
-        // Hapus file foto dari folder jika ada
         if ($user->foto && file_exists(public_path('uploads/user/' . $user->foto))) {
             unlink(public_path('uploads/user/' . $user->foto));
         }

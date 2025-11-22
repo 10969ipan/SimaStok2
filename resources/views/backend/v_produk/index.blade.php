@@ -3,14 +3,32 @@
 
 <div class="row">
     <div class="col-12">
-        <a href="{{ route('backend.produk.create') }}" class="btn btn-primary mb-3">
-            <i class="fa fa-plus"></i> Tambah Produk
-        </a>
+        
+        {{-- Baris Tombol Tambah & Pencarian --}}
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a href="{{ route('backend.produk.create') }}" class="btn btn-primary">
+                <i class="fa fa-plus"></i> Tambah Produk
+            </a>
+
+            <form action="{{ route('backend.produk.index') }}" method="GET" class="d-flex">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Cari Nama / SKU..." value="{{ request('search') }}">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-search"></i> Cari
+                    </button>
+                    @if(request('search'))
+                        <a href="{{ route('backend.produk.index') }}" class="btn btn-danger" title="Reset Pencarian">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
 
         @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
-            
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         @endif
 
@@ -23,7 +41,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Gambar</th>
-                                <th>SKU</th> <th>Kategori</th>
+                                <th>SKU</th>
+                                <th>Kategori</th>
                                 <th>Nama Produk</th>
                                 <th>Harga</th>
                                 <th>Stok</th>
@@ -32,7 +51,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($index as $row)
+                            @forelse ($index as $row)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
@@ -42,7 +61,8 @@
                                         <img src="{{ asset('backend/image/img-default.jpg') }}" width="50" class="img-thumbnail">
                                     @endif
                                 </td>
-                                <td>{{ $row->sku_code ?? '-' }}</td> <td>{{ $row->kategori }}</td>
+                                <td>{{ $row->sku_code ?? '-' }}</td>
+                                <td>{{ $row->kategori }}</td>
                                 <td>{{ $row->nama_produk }}</td>
                                 <td>
                                     Beli: Rp {{ number_format($row->harga_beli, 0, ',', '.') }} <br>
@@ -50,10 +70,11 @@
                                 </td>
                                 <td>
                                     Total: {{ $row->stok_awal }} <br>
+                                    @if(isset($row->stok_xs))
                                     <small class="text-muted">
-                                        XS:{{$row->stok_xs}}, S:{{$row->stok_s}}, M:{{$row->stok_m}},<br>
-                                        L:{{$row->stok_l}}, XL:{{$row->stok_xl}}, XXL:{{$row->stok_xxl}}
+                                        XS:{{$row->stok_xs}}, S:{{$row->stok_s}}, ...
                                     </small>
+                                    @endif
                                 </td>
                                 <td>
                                     @if($row->status == 'Active')
@@ -75,7 +96,13 @@
                                     </form>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="9" class="text-center text-muted">
+                                    Data produk tidak ditemukan.
+                                </td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

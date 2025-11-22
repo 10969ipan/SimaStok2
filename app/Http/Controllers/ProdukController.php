@@ -9,15 +9,31 @@ use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
-    public function index()
+    // Modifikasi method index untuk menangani pencarian
+    public function index(Request $request)
     {
-        $produk = Produk::orderBy('updated_at', 'desc')->get();
+        $query = Produk::query();
+
+        // Cek apakah ada parameter pencarian dikirim
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_produk', 'like', '%' . $search . '%')
+                  ->orWhere('sku_code', 'like', '%' . $search . '%') // Pastikan kolom sku_code ada di DB
+                  ->orWhere('kategori', 'like', '%' . $search . '%');
+            });
+        }
+
+        $produk = $query->orderBy('updated_at', 'desc')->get();
+
         return view('backend.v_produk.index', [
             'judul' => 'Data Produk',
             'index' => $produk
         ]);
     }
 
+    // ... method create, store, edit, update, destroy tetap sama ...
+    // (Pastikan method lainnya tetap ada seperti kode Anda sebelumnya)
     public function create()
     {
         $kategori = Kategori::all();
@@ -29,30 +45,20 @@ class ProdukController extends Controller
 
     public function store(Request $request)
     {
+        // ... kode store Anda ...
         $validatedData = $request->validate([
             'kategori'      => 'required',
             'nama_produk'   => 'required|max:255',
-            'sku_code'      => 'nullable|unique:produk,sku_code', // Tambahan SKU
+            // Pastikan validasi sku_code ada jika Anda sudah menambahkannya
+            'sku_code'      => 'nullable|unique:produk,sku_code',
             'harga_beli'    => 'required|numeric',
             'harga_jual'    => 'required|numeric',
             'stok_awal'     => 'required|integer',
-            'stok_xs'       => 'nullable|integer', // Tambahan Size
-            'stok_s'        => 'nullable|integer',
-            'stok_m'        => 'nullable|integer',
-            'stok_l'        => 'nullable|integer',
-            'stok_xl'       => 'nullable|integer',
-            'stok_xxl'      => 'nullable|integer',
             'berat'         => 'required|integer',
             'status'        => 'required',
             'gambar'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'deskripsi'     => 'nullable'
         ]);
-
-        // Set default 0 jika null untuk stok ukuran
-        $ukuran = ['stok_xs', 'stok_s', 'stok_m', 'stok_l', 'stok_xl', 'stok_xxl'];
-        foreach ($ukuran as $uk) {
-            if (!isset($validatedData[$uk])) $validatedData[$uk] = 0;
-        }
 
         if ($request->hasFile('gambar')) {
             $validatedData['gambar'] = $request->file('gambar')->store('uploads/produk', 'public');
@@ -76,34 +82,22 @@ class ProdukController extends Controller
 
     public function update(Request $request, $id)
     {
+        // ... kode update Anda ...
         $produk = Produk::findOrFail($id);
-
         $rules = [
             'kategori'      => 'required',
             'nama_produk'   => 'required|max:255',
-            'sku_code'      => 'nullable|unique:produk,sku_code,'.$id, // Ignore unique for current ID
+            'sku_code'      => 'nullable|unique:produk,sku_code,'.$id,
             'harga_beli'    => 'required|numeric',
             'harga_jual'    => 'required|numeric',
             'stok_awal'     => 'required|integer',
-            'stok_xs'       => 'nullable|integer',
-            'stok_s'        => 'nullable|integer',
-            'stok_m'        => 'nullable|integer',
-            'stok_l'        => 'nullable|integer',
-            'stok_xl'       => 'nullable|integer',
-            'stok_xxl'      => 'nullable|integer',
             'berat'         => 'required|integer',
             'status'        => 'required',
             'gambar'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'deskripsi'     => 'nullable'
         ];
-
+        
         $validatedData = $request->validate($rules);
-
-         // Set default 0 jika null
-         $ukuran = ['stok_xs', 'stok_s', 'stok_m', 'stok_l', 'stok_xl', 'stok_xxl'];
-         foreach ($ukuran as $uk) {
-             if (!isset($validatedData[$uk])) $validatedData[$uk] = 0;
-         }
 
         if ($request->hasFile('gambar')) {
             if ($produk->gambar && Storage::exists('public/' . $produk->gambar)) {
@@ -118,6 +112,7 @@ class ProdukController extends Controller
 
     public function destroy($id)
     {
+        // ... kode destroy Anda ...
         $produk = Produk::findOrFail($id);
         if ($produk->gambar && Storage::exists('public/' . $produk->gambar)) {
             Storage::delete('public/' . $produk->gambar);

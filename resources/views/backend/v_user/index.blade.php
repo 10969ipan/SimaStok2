@@ -1,116 +1,106 @@
 @extends('backend.v_layouts.app')
 @section('content')
-<div class="card shadow-sm">
-    <div class="card-body">
+
+<div class="row">
+    <div class="col-12">
+        
+        {{-- Baris Tombol Tambah & Pencarian (Sama seperti Produk) --}}
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="card-title mb-0">{{ $judul }}</h5>
             <a href="{{ route('backend.user.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Tambah
+                <i class="fa fa-plus"></i> Tambah User
             </a>
+
+            <form action="{{ route('backend.user.index') }}" method="GET" class="d-flex">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Cari Nama / Email..." value="{{ request('search') }}">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-search"></i> Cari
+                    </button>
+                    {{-- Tombol Reset (Muncul jika ada pencarian) --}}
+                    @if(request('search'))
+                        <a href="{{ route('backend.user.index') }}" class="btn btn-danger" title="Reset Pencarian">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    @endif
+                </div>
+            </form>
         </div>
 
-        <!-- 🔍 Form Search -->
-        <div class="d-flex mb-3">
-            <input 
-                type="text" 
-                id="searchInput"
-                class="form-control me-2" 
-                placeholder="Cari nama atau email..." 
-                style="max-width: 300px;">
-            <button type="button" class="btn btn-outline-primary" disabled>
-                <i class="bi bi-search"></i> Cari
-            </button>
+        @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+        @endif
 
-        <table class="table table-bordered table-striped align-middle text-center" id="userTable">
-            <thead class="table-light">
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($index as $row)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td class="nama">{{ $row->nama }}</td>
-                        <td class="email">{{ $row->email }}</td>
-                        <td>
-                            <span class="badge bg-{{ $row->role == 1 ? 'success' : 'secondary' }}">
-                                {{ $row->role == 1 ? 'Admin' : 'User' }}
-                            </span>
-                        </td>
-                        <td>
-                            <span class="badge bg-{{ $row->status == 1 ? 'info' : 'danger' }}">
-                                {{ $row->status == 1 ? 'Aktif' : 'Nonaktif' }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="{{ route('backend.user.edit', $row->id) }}" class="btn btn-warning btn-sm me-1">
-                                <i class="bi bi-pencil-square"></i> Ubah
-                            </a>
-                            <form action="{{ route('backend.user.destroy', $row->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Yakin ingin menghapus user ini?')">
-                                    <i class="bi bi-trash"></i> Hapus
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title text-primary">{{ $judul }}</h5>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="bg-light text-primary">
+                            <tr>
+                                <th>No</th>
+                                <th>Foto</th>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($index as $row)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>
+                                    @if ($row->foto)
+                                        <img src="{{ asset('uploads/user/' . $row->foto) }}" width="40" class="rounded-circle">
+                                    @else
+                                        <img src="{{ asset('backend/image/img-default.jpg') }}" width="40" class="rounded-circle">
+                                    @endif
+                                </td>
+                                <td>{{ $row->nama }}</td>
+                                <td>{{ $row->email }}</td>
+                                <td>
+                                    @if($row->role == 1)
+                                        <span class="badge bg-primary">Admin</span>
+                                    @else
+                                        <span class="badge bg-secondary">User</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($row->status == 1)
+                                        <span class="badge bg-success">Aktif</span>
+                                    @else
+                                        <span class="badge bg-danger">Nonaktif</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('backend.user.edit', $row->id) }}" class="btn btn-sm btn-warning text-white" title="Ubah">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('backend.user.destroy', $row->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger show_confirm" onclick="return confirm('Yakin ingin menghapus user ini?')" title="Hapus">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-3">
+                                    Data user tidak ditemukan.
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-<!-- ✨ SCRIPT REAL-TIME FILTER + HIGHLIGHT -->
-<script>
-document.getElementById("searchInput").addEventListener("input", function() {
-    const search = this.value.toLowerCase();
-    const rows = document.querySelectorAll("#userTable tbody tr");
-
-    rows.forEach(row => {
-        const namaCell = row.querySelector(".nama");
-        const emailCell = row.querySelector(".email");
-        const namaText = namaCell.textContent;
-        const emailText = emailCell.textContent;
-
-        // cek apakah cocok
-        const match = namaText.toLowerCase().includes(search) || emailText.toLowerCase().includes(search);
-
-        // tampilkan/sembunyikan baris
-        row.style.display = match ? "" : "none";
-
-        // highlight kata yang cocok
-        const highlight = (text) => {
-            if (!search) return text;
-            const regex = new RegExp(`(${search})`, "gi");
-            return text.replace(regex, '<mark style="background:#fff3cd; color:#000;">$1</mark>');
-        };
-
-        namaCell.innerHTML = highlight(namaText);
-        emailCell.innerHTML = highlight(emailText);
-    });
-});
-</script>
-
-<style>
-    .card {
-        border-radius: 10px;
-    }
-    .btn {
-        border-radius: 8px;
-        transition: 0.2s ease;
-    }
-    .btn:hover {
-        opacity: 0.9;
-        transform: translateY(-1px);
-    }
-</style>
 @endsection
