@@ -8,9 +8,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="d-flex align-items-center pb-2">
-                            <div class="dot-indicator bg-success mr-2"></div>
                             <p class="mb-0">Selamat Datang, <strong>{{ Auth::user()->nama }}</strong>!</p>
-                        </div>
+                    </div>
                         <p class="text-muted">Anda login sebagai <strong>{{ Auth::user()->role == 1 ? 'Admin' : 'User' }}</strong>.</p>
                     </div>
                 </div>
@@ -25,12 +24,12 @@
             <div class="card-body">
                 <div class="clearfix">
                     <div class="float-left">
-                        <i class="mdi mdi-tshirt-crew text-info icon-lg"></i>
+                        <i class="mdi mdi-tshirt-crew text-info icon-lg"> <style>i{font-size: 1c.0em;}</style></i>
                     </div>
                     <div class="float-right">
                         <p class="mb-0 text-right">Total Produk</p>
                         <div class="fluid-container">
-                            <h3 class="font-weight-medium text-right mb-0">{{ $total_produk }}</h3>
+                            <h3 class="font weight-height-medium text-right mb-0">{{ $total_produk }}</h3>
                         </div>
                     </div>
                 </div>
