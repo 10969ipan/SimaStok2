@@ -22,8 +22,10 @@
                         <thead class="bg-light text-primary">
                             <tr>
                                 <th width="5%">No</th>
+                                <th>Supplier</th> {{-- Kolom Baru --}}
                                 <th>Nama Bahan</th>
-                                <th>Satuan Unit</th>
+                                <th>Stok</th>     {{-- Kolom Baru --}}
+                                <th>Satuan</th>
                                 <th width="15%">Aksi</th>
                             </tr>
                         </thead>
@@ -31,7 +33,10 @@
                             @foreach ($index as $row)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                {{-- Menampilkan Nama Supplier (menggunakan optional() biar tidak error jika supplier terhapus) --}}
+                                <td>{{ optional($row->supplier)->nama_supplier ?? '-' }}</td>
                                 <td>{{ $row->nama_bahan }}</td>
+                                <td>{{ $row->stok }}</td>
                                 <td><span class="badge bg-cyan">{{ $row->satuan_unit }}</span></td>
                                 <td>
                                     <a href="{{ route('backend.bahan_baku.edit', $row->id) }}" class="btn btn-sm btn-warning text-white" title="Ubah">

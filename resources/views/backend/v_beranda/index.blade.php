@@ -10,7 +10,7 @@
                         <div class="d-flex align-items-center pb-2">
                             <p class="mb-0">Selamat Datang, <strong>{{ Auth::user()->nama }}</strong>!</p>
                     </div>
-                        <p class="text-muted">Anda login sebagai <strong>{{ Auth::user()->role == 1 ? 'Admin' : 'User' }}</strong>.</p>
+                        <p class="text-muted">Anda login sebagai <strong>{{ Auth::user()->role == 1 ? 'Admin' : 'User' }} </strong>.</p>
                     </div>
                 </div>
             </div>

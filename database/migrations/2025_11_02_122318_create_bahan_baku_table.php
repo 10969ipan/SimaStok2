@@ -6,25 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        // BAHAN BAKU
         Schema::create('bahan_baku', function (Blueprint $table) {
             $table->id();
+            // Menambahkan foreign key ke tabel supplier
+            // Pastikan tabel 'supplier' sudah dibuat sebelum migration ini jalan
+            $table->foreignId('supplier_id')->nullable()->constrained('supplier')->onDelete('set null');
+            
             $table->string('nama_bahan');
             $table->string('satuan_unit');
+            $table->integer('stok')->default(0); // Menambahkan kolom stok
+            
             $table->timestamps();
-            $table->softDeletes(); // Menambahkan kolom deleted_at untuk soft delete
+            $table->softDeletes();
         });
-
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('bahan_baku');
