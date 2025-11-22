@@ -44,39 +44,39 @@
                             </div>
                         </li>
 
-                        <li class="nav-item dropdown nav-user">
-                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{-- LOGIKA FOTO PROFIL --}}
-                                @php
-                                    $user = Auth::user();
-                                    // Cek apakah user punya foto DAN filenya benar-benar ada di folder public
-                                    if ($user->foto && file_exists(public_path('uploads/user/' . $user->foto))) {
-                                        $fotoProfile = asset('uploads/user/' . $user->foto);
-                                    } else {
-                                        // Jika tidak ada, gunakan foto default template
-                                        $fotoProfile = asset('backend/concept-master/assets/images/avatar-1.jpg');
-                                    }
-                                @endphp
-                                
-                                <img src="{{ $fotoProfile }}" alt="User Avatar" class="user-avatar-md rounded-circle">
-                            </a>
+                    <li class="nav-item dropdown nav-user">
+                        <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{-- LOGIKA FOTO PROFIL --}}
+                            @php
+                                $user = Auth::user();
+                                // Cek apakah user punya foto DAN filenya benar-benar ada di folder public
+                                if ($user->foto && file_exists(public_path('uploads/user/' . $user->foto))) {
+                                    $fotoProfile = asset('uploads/user/' . $user->foto);
+                                } else {
+                                    // Jika tidak ada, gunakan foto default template
+                                    $fotoProfile = asset('backend/concept-master/assets/images/avatar-1.jpg');
+                                }
+                            @endphp
+                            
+                            <img src="{{ $fotoProfile }}" alt="User Avatar" class="user-avatar-md rounded-circle">
+                        </a>
 
-                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
-                                <div class="nav-user-info">
-                                    <h5 class="mb-0 text-white nav-user-name">{{ Auth::user()->nama ?? 'User' }}</h5>
-                                    <span class="status"></span><span class="ml-2">Online</span>
-                                </div>
-                                <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Profil Saya</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Pengaturan</a>
-                                
-                                <form action="{{ route('backend.logout') }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item text-danger" style="cursor: pointer; background: none; border: none; width: 100%; text-align: left;">
-                                        <i class="fas fa-power-off mr-2"></i>Logout
-                                    </button>
-                                </form>
+                        <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                            <div class="nav-user-info">
+                                <h5 class="mb-0 text-white nav-user-name">{{ Auth::user()->nama ?? 'User' }}</h5>
+                                <span class="status"></span><span class="ml-2">Online</span>
                             </div>
-                        </li>
+                            <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Profil Saya</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Pengaturan</a>
+                            
+                            <form action="{{ route('backend.logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-danger" style="cursor: pointer; background: none; border: none; width: 100%; text-align: left;">
+                                    <i class="fas fa-power-off mr-2"></i>Logout
+                                </button>
+                            </form>
+                        </div>
+                    </li>
                     </ul>
                 </div>
             </nav>
