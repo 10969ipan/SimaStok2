@@ -9,8 +9,8 @@
 
         @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
+            
         </div>
         @endif
 
@@ -23,7 +23,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Gambar</th>
-                                <th>Kategori</th>
+                                <th>SKU</th> <th>Kategori</th>
                                 <th>Nama Produk</th>
                                 <th>Harga</th>
                                 <th>Stok</th>
@@ -42,13 +42,19 @@
                                         <img src="{{ asset('backend/image/img-default.jpg') }}" width="50" class="img-thumbnail">
                                     @endif
                                 </td>
-                                <td>{{ $row->kategori }}</td>
+                                <td>{{ $row->sku_code ?? '-' }}</td> <td>{{ $row->kategori }}</td>
                                 <td>{{ $row->nama_produk }}</td>
                                 <td>
                                     Beli: Rp {{ number_format($row->harga_beli, 0, ',', '.') }} <br>
                                     <b>Jual: Rp {{ number_format($row->harga_jual, 0, ',', '.') }}</b>
                                 </td>
-                                <td>{{ $row->stok_awal }}</td>
+                                <td>
+                                    Total: {{ $row->stok_awal }} <br>
+                                    <small class="text-muted">
+                                        XS:{{$row->stok_xs}}, S:{{$row->stok_s}}, M:{{$row->stok_m}},<br>
+                                        L:{{$row->stok_l}}, XL:{{$row->stok_xl}}, XXL:{{$row->stok_xxl}}
+                                    </small>
+                                </td>
                                 <td>
                                     @if($row->status == 'Active')
                                         <span class="badge bg-success">Aktif</span>

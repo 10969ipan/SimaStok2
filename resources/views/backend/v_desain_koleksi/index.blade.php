@@ -6,8 +6,8 @@
 
         @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
+            
         </div>
         @endif
 

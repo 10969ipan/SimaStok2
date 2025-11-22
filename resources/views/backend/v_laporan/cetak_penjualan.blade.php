@@ -22,7 +22,7 @@
 <body onload="window.print()">
 
     <div class="header">
-        <h2>SIMASTOK - TOKO ONLINE</h2>
+        <h2>SIMASTOK</h2>
         <p>Laporan Transaksi Penjualan</p>
         <p>Periode: {{ \Carbon\Carbon::parse($tgl_awal)->format('d M Y') }} s/d {{ \Carbon\Carbon::parse($tgl_akhir)->format('d M Y') }}</p>
     </div>

@@ -27,6 +27,12 @@
                             </div>
 
                             <div class="form-group mb-3">
+                                <label>Kode SKU</label>
+                                <input type="text" name="sku_code" class="form-control @error('sku_code') is-invalid @enderror" value="{{ old('sku_code', $edit->sku_code) }}">
+                                @error('sku_code') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+
+                            <div class="form-group mb-3">
                                 <label>Nama Produk</label>
                                 <input type="text" name="nama_produk" class="form-control @error('nama_produk') is-invalid @enderror" value="{{ old('nama_produk', $edit->nama_produk) }}">
                                 @error('nama_produk') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -51,10 +57,39 @@
                         </div>
 
                         <div class="col-md-6">
+                            {{-- Input Stok Per Ukuran --}}
+                            <label class="mb-1 font-weight-bold text-primary">Stok Varian Ukuran</label>
+                            <div class="row mb-3 p-2 border rounded bg-light">
+                                <div class="col-4 mb-2">
+                                    <label><small>XS</small></label>
+                                    <input type="number" name="stok_xs" class="form-control form-control-sm" value="{{ old('stok_xs', $edit->stok_xs) }}">
+                                </div>
+                                <div class="col-4 mb-2">
+                                    <label><small>S</small></label>
+                                    <input type="number" name="stok_s" class="form-control form-control-sm" value="{{ old('stok_s', $edit->stok_s) }}">
+                                </div>
+                                <div class="col-4 mb-2">
+                                    <label><small>M</small></label>
+                                    <input type="number" name="stok_m" class="form-control form-control-sm" value="{{ old('stok_m', $edit->stok_m) }}">
+                                </div>
+                                <div class="col-4">
+                                    <label><small>L</small></label>
+                                    <input type="number" name="stok_l" class="form-control form-control-sm" value="{{ old('stok_l', $edit->stok_l) }}">
+                                </div>
+                                <div class="col-4">
+                                    <label><small>XL</small></label>
+                                    <input type="number" name="stok_xl" class="form-control form-control-sm" value="{{ old('stok_xl', $edit->stok_xl) }}">
+                                </div>
+                                <div class="col-4">
+                                    <label><small>XXL</small></label>
+                                    <input type="number" name="stok_xxl" class="form-control form-control-sm" value="{{ old('stok_xxl', $edit->stok_xxl) }}">
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label>Stok Awal</label>
+                                        <label>Stok Total / Awal</label>
                                         <input type="number" name="stok_awal" class="form-control @error('stok_awal') is-invalid @enderror" value="{{ old('stok_awal', $edit->stok_awal) }}">
                                         @error('stok_awal') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                     </div>

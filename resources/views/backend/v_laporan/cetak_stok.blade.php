@@ -19,7 +19,7 @@
 <body onload="window.print()">
 
     <div class="header">
-        <h2>SIMASTOK - TOKO ONLINE</h2>
+        <h2>SIMASTOK</h2>
         <p>Laporan Stok Produk Per {{ date('d M Y') }}</p>
     </div>
 
