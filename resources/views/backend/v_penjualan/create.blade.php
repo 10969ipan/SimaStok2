@@ -6,6 +6,14 @@
         <form action="{{ route('backend.penjualan.store') }}" method="post">
             @csrf
             
+            {{-- Tampilkan Pesan Error jika stok habis --}}
+            @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0 text-white"><i class="fas fa-cash-register"></i> {{ $judul }}</h5>
@@ -38,10 +46,10 @@
                         <table class="table table-bordered table-hover align-middle" id="tabelTransaksi">
                             <thead class="table-dark text-center">
                                 <tr>
-                                    <th width="40%">Nama Produk</th>
-                                    <th width="20%">Harga Satuan</th>
-                                    <th width="15%">Jumlah</th>
-                                    <th width="20%">Subtotal</th>
+                                    <th width="35%">Nama Produk</th>
+                                    <th width="15%">Ukuran</th> <th width="20%">Harga Satuan</th>
+                                    <th width="10%">Jumlah</th>
+                                    <th width="15%">Subtotal</th>
                                     <th width="5%"><i class="fas fa-trash"></i></th>
                                 </tr>
                             </thead>
@@ -51,10 +59,19 @@
                                         <select name="produk_id[]" class="form-control select-produk" onchange="updateHarga(this)" required>
                                             <option value="" data-harga="0">-- Pilih Produk --</option>
                                             @foreach ($produk as $prod)
-                                                <option value="{{ $prod->id }}" data-harga="{{ $prod->harga }}">
-                                                    {{ $prod->nama_produk }} (Stok: {{ $prod->stok }})
+                                                <option value="{{ $prod->id }}" data-harga="{{ $prod->harga_jual }}">
+                                                    {{ $prod->nama_produk }} (Total Stok: {{ $prod->total_stok }})
                                                 </option>
                                             @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="ukuran[]" class="form-control" required>
+                                            <option value="S">S</option>
+                                            <option value="M">M</option>
+                                            <option value="L">L</option>
+                                            <option value="XL">XL</option>
+                                            <option value="XXL">XXL</option>
                                         </select>
                                     </td>
                                     <td>
@@ -81,7 +98,7 @@
                             </tbody>
                             <tfoot class="bg-light">
                                 <tr>
-                                    <td colspan="3" class="text-end fw-bold fs-5 text-uppercase pt-3">Total Pembayaran</td>
+                                    <td colspan="4" class="text-end fw-bold fs-5 text-uppercase pt-3">Total Pembayaran</td>
                                     <td colspan="2" class="text-end">
                                         <h3 class="text-primary fw-bold mb-0" id="totalBayar">Rp 0</h3>
                                     </td>
@@ -107,73 +124,58 @@
 </div>
 
 <script>
-    // Fungsi dijalankan saat halaman selesai dimuat
     document.addEventListener('DOMContentLoaded', function() {
-        
-        // 1. Fungsi Update Harga saat pilih produk
+        // Fungsi Update Harga
         window.updateHarga = function(selectElement) {
             let harga = selectElement.options[selectElement.selectedIndex].getAttribute('data-harga');
             let row = selectElement.closest('tr');
-            
-            // Isi input harga
             row.querySelector('.harga-satuan').value = harga;
-            
-            // Hitung ulang subtotal baris ini
             hitungSubtotal(row.querySelector('.qty-input'));
         }
 
-        // 2. Fungsi Hitung Subtotal per Baris
+        // Fungsi Hitung Subtotal
         window.hitungSubtotal = function(inputQty) {
             let row = inputQty.closest('tr');
             let harga = parseFloat(row.querySelector('.harga-satuan').value) || 0;
             let qty = parseInt(inputQty.value) || 0;
-            
             let subtotal = harga * qty;
-            
-            // Tampilkan subtotal dengan format ribuan
             row.querySelector('.subtotal').value = new Intl.NumberFormat('id-ID').format(subtotal);
-            
             hitungTotalKeseluruhan();
         }
 
-        // 3. Fungsi Hitung Total Semua Belanjaan
+        // Hitung Total Akhir
         function hitungTotalKeseluruhan() {
             let total = 0;
             document.querySelectorAll('.subtotal').forEach(function(el) {
-                // Hapus titik ribuan sebelum dijumlahkan
                 let nilai = el.value.replace(/\./g, '');
                 total += parseInt(nilai) || 0;
             });
-            
             document.getElementById('totalBayar').innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
         }
 
-        // 4. Logika Tambah Baris Baru
+        // Tambah Baris Baru
         document.getElementById('tambahBaris').addEventListener('click', function() {
             let tableBody = document.getElementById('bodyTransaksi');
-            let firstRow = tableBody.querySelector('.baris-produk'); // Ambil baris pertama sebagai template
-            let newRow = firstRow.cloneNode(true); // Duplikat baris
+            let firstRow = tableBody.querySelector('.baris-produk');
+            let newRow = firstRow.cloneNode(true);
 
-            // Reset nilai input di baris baru
-            newRow.querySelector('select').value = "";
+            // Reset nilai
+            newRow.querySelector('select.select-produk').value = "";
+            newRow.querySelector('select[name="ukuran[]"]').value = "M"; // Default M
             newRow.querySelector('.harga-satuan').value = 0;
             newRow.querySelector('.qty-input').value = 1;
             newRow.querySelector('.subtotal').value = 0;
             
-            // Aktifkan tombol hapus di baris baru
+            // Aktifkan tombol hapus
             let btnHapus = newRow.querySelector('.remove-row');
             btnHapus.disabled = false;
-            
-            // Tambahkan event listener untuk hapus baris
             btnHapus.addEventListener('click', function() {
                 this.closest('tr').remove();
                 hitungTotalKeseluruhan();
             });
 
-            // Masukkan baris baru ke tabel
             tableBody.appendChild(newRow);
         });
     });
 </script>
-
 @endsection

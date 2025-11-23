@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Penjualan;
 use App\Models\DetailPenjualan;
-use App\Models\ProdukFashion; // Pastikan Model ini sesuai dengan file Anda
+use App\Models\ProdukFashion;
 use App\Models\Pelanggan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,11 +13,7 @@ class PenjualanController extends Controller
 {
     public function index()
     {
-        // Mengambil data penjualan beserta relasinya untuk ditampilkan di tabel utama
-        $penjualan = Penjualan::with(['user', 'pelanggan', 'details.produk'])
-            ->orderBy('tgl_penjualan', 'desc')
-            ->get();
-            
+        $penjualan = Penjualan::with(['user', 'pelanggan', 'details.produk'])->orderBy('tgl_penjualan', 'desc')->get();
         return view('backend.v_penjualan.index', [
             'judul' => 'Data Penjualan',
             'index' => $penjualan
@@ -27,8 +23,10 @@ class PenjualanController extends Controller
     public function create()
     {
         $pelanggan = Pelanggan::all();
-        // Hanya ambil produk yang stoknya tersedia (> 0)
-        $produk = ProdukFashion::where('stok', '>', 0)->get();
+        
+        // Ambil produk yang total stoknya (semua ukuran) lebih dari 0
+        // Menggunakan whereRaw karena kita menjumlahkan kolom secara manual di query
+        $produk = ProdukFashion::whereRaw('(stok_xs + stok_s + stok_m + stok_l + stok_xl + stok_xxl) > 0')->get();
         
         return view('backend.v_penjualan.create', [
             'judul' => 'Tambah Transaksi',
@@ -39,66 +37,67 @@ class PenjualanController extends Controller
 
     public function store(Request $request)
     {
-        // 1. Validasi Input
         $request->validate([
             'tgl_penjualan' => 'required|date',
             'id_pelanggan' => 'required|exists:pelanggan,id',
-            'produk_id' => 'required|array', // Harus array karena banyak barang
+            'produk_id' => 'required|array',
             'produk_id.*' => 'exists:produk_fashion,id',
+            'ukuran' => 'required|array', // Validasi ukuran wajib ada
             'jumlah' => 'required|array',
             'jumlah.*' => 'integer|min:1',
         ]);
 
         try {
-            DB::beginTransaction(); // Mulai Transaksi Database
+            DB::beginTransaction();
 
-            // 2. Simpan Header Penjualan (Satu kali)
             $penjualan = Penjualan::create([
                 'tgl_penjualan' => $request->tgl_penjualan,
                 'id_pelanggan' => $request->id_pelanggan,
-                'id_user' => Auth::id(), // Mengambil ID user yang sedang login
+                'id_user' => Auth::id(),
             ]);
 
-            // 3. Simpan Detail Barang & Update Stok (Looping)
             foreach ($request->produk_id as $index => $id_produk) {
                 $qty = $request->jumlah[$index];
-                
-                // Cek stok terakhir sebelum simpan
+                $ukuran = strtolower($request->ukuran[$index]); // ubah jadi huruf kecil: s, m, l
+                $nama_kolom_stok = 'stok_' . $ukuran; // contoh hasil: stok_m
+
                 $produk = ProdukFashion::findOrFail($id_produk);
-                if ($produk->stok < $qty) {
-                    // Jika stok kurang, batalkan semua proses
-                    DB::rollBack(); 
-                    return redirect()->back()->with('error', 'Stok untuk produk ' . $produk->nama_produk . ' tidak mencukupi!');
+
+                // 1. Cek apakah kolom ukuran valid (mencegah hack input ukuran aneh)
+                if (!in_array($nama_kolom_stok, ['stok_xs', 'stok_s', 'stok_m', 'stok_l', 'stok_xl', 'stok_xxl'])) {
+                    throw new \Exception("Ukuran $ukuran tidak valid.");
                 }
 
-                // Simpan ke detail_penjualan
+                // 2. Cek ketersediaan stok spesifik
+                if ($produk->$nama_kolom_stok < $qty) {
+                    DB::rollBack();
+                    return redirect()->back()->with('error', 'Stok ukuran ' . strtoupper($ukuran) . ' untuk ' . $produk->nama_produk . ' tidak mencukupi! (Sisa: ' . $produk->$nama_kolom_stok . ')');
+                }
+
+                // 3. Simpan Detail
                 DetailPenjualan::create([
                     'id_penjualan' => $penjualan->id,
                     'id_produk' => $id_produk,
+                    'ukuran' => strtoupper($ukuran), // Simpan di DB sebagai uppercase (S, M, L)
                     'kuantitas' => $qty
                 ]);
 
-                // Kurangi Stok Produk
-                $produk->decrement('stok', $qty);
+                // 4. Kurangi Stok Spesifik
+                $produk->decrement($nama_kolom_stok, $qty);
             }
 
-            DB::commit(); // Simpan permanen jika sukses
+            DB::commit();
             return redirect()->route('backend.penjualan.index')->with('success', 'Transaksi berhasil disimpan!');
 
         } catch (\Exception $e) {
-            DB::rollBack(); // Batalkan jika ada error
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal: ' . $e->getMessage());
         }
     }
     
     public function destroy($id)
     {
         $penjualan = Penjualan::findOrFail($id);
-        // Opsional: Kembalikan stok jika transaksi dihapus
-        /* foreach ($penjualan->details as $detail) {
-            $detail->produk->increment('stok', $detail->kuantitas);
-        } 
-        */
         $penjualan->delete();
         return redirect()->back()->with('success', 'Data berhasil dihapus');
     }

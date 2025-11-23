@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_penjualan')->constrained('penjualan')->cascadeOnDelete();
             $table->foreignId('id_produk')->constrained('produk_fashion')->cascadeOnDelete();
+            $table->string('ukuran', 5); // Tambahkan kolom ini (XS, S, M, dll)
             $table->integer('kuantitas');
             $table->timestamps();
-            $table->softDeletes(); // Menambahkan kolom deleted_at untuk soft delete
+            $table->softDeletes();
         });
     }
-
     /**
      * Reverse the migrations.
      */
