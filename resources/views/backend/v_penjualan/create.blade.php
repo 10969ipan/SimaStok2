@@ -42,7 +42,7 @@
 
                     <div class="table-responsive">
                         <table class="table table-bordered align-middle" id="tabelTransaksi">
-                            <thead class="table-dark text-center">
+                            <thead class="table-light text-center">
                                 <tr>
                                     <th width="35%">Produk</th>
                                     <th width="15%">Ukuran</th>
@@ -108,8 +108,8 @@
                     <button type="button" class="btn btn-success mt-2" id="tambahBaris"><i class="fas fa-plus-circle"></i> Tambah Produk Lain</button>
                 </div>
                 <div class="card-footer text-end">
-                    <a href="{{ route('backend.penjualan.index') }}" class="btn btn-secondary">Batal</a>
                     <button type="submit" class="btn btn-primary">Simpan Transaksi</button>
+                    <a href="{{ route('backend.penjualan.index') }}" class="btn btn-secondary">Batal</a>
                 </div>
             </div>
         </form>
