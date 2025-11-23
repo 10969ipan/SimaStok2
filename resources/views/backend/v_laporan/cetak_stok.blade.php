@@ -3,80 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cetak Laporan Stok Detail</title>
+    <title>{{ $judul }}</title>
     <style>
         body { font-family: Arial, sans-serif; font-size: 12px; }
         .header { text-align: center; margin-bottom: 20px; }
         .header h2 { margin: 0; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #000; padding: 8px; text-align: left; vertical-align: top; }
-        th { background-color: #f2f2f2; }
+        th, td { border: 1px solid #000; padding: 6px; text-align: left; vertical-align: middle; }
+        th { background-color: #f2f2f2; text-align: center; font-weight: bold; }
         .text-center { text-align: center; }
         .text-right { text-align: right; }
-        .warning { background-color: #ffcccc; } /* Merah jika stok tipis */
+        .warning { background-color: #ffcccc; } /* Merah muda jika stok tipis */
     </style>
 </head>
 <body onload="window.print()">
 
     <div class="header">
         <h2>SIMASTOK</h2>
-        <p>Laporan Stok Detail Produk Per {{ date('d M Y') }}</p>
+        <p>Laporan Stok Produk Per {{ date('d M Y') }}</p>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th width="5%" class="text-center">No</th>
+                <th width="5%">No</th>
+                <th width="15%">SKU</th>
                 <th>Nama Produk</th>
-                <th>Kategori</th>
-                {{-- Kolom Baru untuk Detail --}}
-                <th class="text-center">Ukuran</th>
-                <th class="text-center">Warna</th>
-                <th class="text-center">Stok</th>
+                <th width="20%">Kategori</th>
+                <th width="10%">Warna</th>
+                <th width="10%">Stok</th>
             </tr>
         </thead>
         <tbody>
             @php $no = 1; @endphp
             @foreach ($data as $produk)
-                {{-- Cek apakah produk memiliki varian detail --}}
-                @if($produk->details->isNotEmpty())
-                    @foreach($produk->details as $detail)
-                    <tr class="{{ $detail->stok <= 5 ? 'warning' : '' }}">
-                        <td class="text-center">{{ $no++ }}</td>
-                        <td>
-                            {{ $produk->nama_produk }} <br>
-                            <small style="color: #666;">SKU: {{ $detail->sku_detail ?? '-' }}</small>
-                        </td>
-                        <td>{{ $produk->kategori }}</td>
-                        
-                        {{-- Data dari tabel produk_details --}}
-                        <td class="text-center">{{ $detail->ukuran }}</td>
-                        <td class="text-center">{{ $detail->warna }}</td>
-                        <td class="text-center font-weight-bold">{{ $detail->stok }}</td>
-                    </tr>
-                    @endforeach
-                @else
-                    {{-- JIKA TIDAK ADA DETAIL (Produk Simple), TAMPILKAN STOK UTAMA --}}
-                    <tr class="{{ $produk->stok_awal <= 10 ? 'warning' : '' }}">
-                        <td class="text-center">{{ $no++ }}</td>
-                        <td>
-                            {{ $produk->nama_produk }} <br>
-                            <small style="color: #666;">SKU: {{ $produk->sku_code }}</small>
-                        </td>
-                        <td>{{ $produk->kategori }}</td>
-                        <td class="text-center">-</td>
-                        <td class="text-center">{{ $produk->warna ?? '-' }}</td>
-                        <td class="text-center">{{ $produk->stok_awal }}</td>
-                    </tr>
-                @endif
+            {{-- Menandai baris merah jika stok_awal kurang dari atau sama dengan 5 --}}
+            <tr class="{{ $produk->stok_awal <= 5 ? 'warning' : '' }}">
+                <td class="text-center">{{ $no++ }}</td>
+                <td>{{ $produk->sku_code }}</td>
+                <td>{{ $produk->nama_produk }}</td>
+                <td>{{ $produk->kategori }}</td>
+                <td class="text-center">{{ $produk->warna ?? '-' }}</td>
+                <td class="text-center font-weight-bold">{{ $produk->stok_awal }}</td>
+            </tr>
             @endforeach
+            
+            @if($data->isEmpty())
+            <tr>
+                <td colspan="6" class="text-center">Data produk kosong.</td>
+            </tr>
+            @endif
         </tbody>
     </table>
     
-    <p style="font-size: 10px; margin-top: 5px;">* Baris berwarna merah menandakan stok varian menipis (<= 5).</p>
+    <div style="margin-top: 10px; font-size: 11px;">
+        <span style="background-color: #ffcccc; border: 1px solid #000; padding: 0 10px;">&nbsp;</span>
+        Menandakan stok menipis (<= 5).
+    </div>
 
     <div style="margin-top: 30px; text-align: right;">
-        <p>Dicetak oleh: {{ Auth::user()->nama }}</p>
+        <p>Dicetak oleh: {{ Auth::user()->nama ?? 'Admin' }}</p>
+        <br><br>
+        <p>(_______________________)</p>
+        <p>{{ Auth::user()->nama ?? 'Admin' }}</p>
     </div>
 
 </body>

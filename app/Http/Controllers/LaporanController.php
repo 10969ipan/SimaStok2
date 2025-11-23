@@ -46,12 +46,11 @@ class LaporanController extends Controller
     // Cetak Laporan Stok Produk
     public function cetakStok()
     {
-        // Ambil semua produk beserta detail-nya (ukuran/warna)
-        // Diurutkan berdasarkan nama produk agar rapi
-        $data = Produk::with('ProdukDetail')->orderBy('nama_produk', 'asc')->get();
+        // Ambil data produk saja, urutkan nama
+        $data = Produk::orderBy('nama_produk', 'asc')->get();
 
         return view('backend.v_laporan.cetak_stok', [
-            'judul' => 'Laporan Stok Detail Produk',
+            'judul' => 'Laporan Stok Produk',
             'data'  => $data
         ]);
     }
