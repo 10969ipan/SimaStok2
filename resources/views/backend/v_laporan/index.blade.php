@@ -1,30 +1,7 @@
 @extends('backend.v_layouts.app')
 @section('content')
 
-<div class="row">
-    {{-- 1. KARTU LAPORAN PENJUALAN --}}
-    <div class="col-md-4"> {{-- Ubah dari col-md-6 ke col-md-4 --}}
-        <div class="card shadow-sm h-100">
-            <div class="card-header bg-white text-primary">
-                <h5 class="mb-0"><i class="mdi mdi-file-document"></i> Laporan Penjualan</h5>
-            </div>
-            <div class="card-body">
-                <form action="{{ route('backend.laporan.cetak_penjualan') }}" method="GET" target="_blank">
-                    <div class="form-group mb-3">
-                        <label>Tanggal Awal</label>
-                        <input type="date" name="tgl_awal" class="form-control" value="{{ date('Y-m-01') }}" required>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label>Tanggal Akhir</label>
-                        <input type="date" name="tgl_akhir" class="form-control" value="{{ date('Y-m-d') }}" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="fa fa-print"></i> Cetak
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
+
 
     {{-- 2. KARTU LAPORAN STOK PRODUK JADI --}}
     <div class="col-md-4"> {{-- Ubah dari col-md-6 ke col-md-4 --}}

@@ -69,5 +69,7 @@ Route::get('/backend/laporan', [LaporanController::class, 'index'])->name('backe
 Route::get('/backend/laporan/cetak-penjualan', [LaporanController::class, 'cetakPenjualan'])->name('backend.laporan.cetak_penjualan');
 Route::get('/backend/laporan/cetak-stok', [LaporanController::class, 'cetakStok'])->name('backend.laporan.cetak_stok');
 Route::get('/backend/laporan/cetak-stok-bahan', [LaporanController::class, 'cetakStokBahan'])->name('backend.laporan.cetak_stok_bahan');
+// Tambahkan di dalam group route backend/penjualan
+Route::get('penjualan/{id}', [PenjualanController::class, 'show'])->name('backend.penjualan.show');
 });
 });
