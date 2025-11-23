@@ -13,7 +13,10 @@ class PenjualanController extends Controller
 {
     public function index()
     {
-        $penjualan = Penjualan::with(['user', 'pelanggan', 'details.produk'])->orderBy('tgl_penjualan', 'desc')->get();
+        $penjualan = Penjualan::with(['user', 'pelanggan', 'details.produk'])
+            ->orderBy('tgl_penjualan', 'desc')
+            ->get();
+            
         return view('backend.v_penjualan.index', [
             'judul' => 'Data Penjualan',
             'index' => $penjualan
@@ -24,8 +27,8 @@ class PenjualanController extends Controller
     {
         $pelanggan = Pelanggan::all();
         
-        // Ambil produk yang total stoknya (semua ukuran) lebih dari 0
-        // Menggunakan whereRaw karena kita menjumlahkan kolom secara manual di query
+        // PERBAIKAN: Ambil produk yang total semua varian stoknya > 0
+        // Kita gunakan whereRaw untuk menjumlahkan kolom stok varian
         $produk = ProdukFashion::whereRaw('(stok_xs + stok_s + stok_m + stok_l + stok_xl + stok_xxl) > 0')->get();
         
         return view('backend.v_penjualan.create', [
@@ -41,10 +44,8 @@ class PenjualanController extends Controller
             'tgl_penjualan' => 'required|date',
             'id_pelanggan' => 'required|exists:pelanggan,id',
             'produk_id' => 'required|array',
-            'produk_id.*' => 'exists:produk_fashion,id',
-            'ukuran' => 'required|array', // Validasi ukuran wajib ada
+            'ukuran' => 'required|array', // Wajib pilih ukuran
             'jumlah' => 'required|array',
-            'jumlah.*' => 'integer|min:1',
         ]);
 
         try {
@@ -58,32 +59,28 @@ class PenjualanController extends Controller
 
             foreach ($request->produk_id as $index => $id_produk) {
                 $qty = $request->jumlah[$index];
-                $ukuran = strtolower($request->ukuran[$index]); // ubah jadi huruf kecil: s, m, l
-                $nama_kolom_stok = 'stok_' . $ukuran; // contoh hasil: stok_m
+                $ukuran = strtolower($request->ukuran[$index]); // s, m, l
+                $kolom_stok = 'stok_' . $ukuran; // misal: stok_m
 
                 $produk = ProdukFashion::findOrFail($id_produk);
 
-                // 1. Cek apakah kolom ukuran valid (mencegah hack input ukuran aneh)
-                if (!in_array($nama_kolom_stok, ['stok_xs', 'stok_s', 'stok_m', 'stok_l', 'stok_xl', 'stok_xxl'])) {
-                    throw new \Exception("Ukuran $ukuran tidak valid.");
+                // Cek apakah stok varian tersebut mencukupi
+                if ($produk->$kolom_stok < $qty) {
+                    DB::rollBack(); // Batalkan semua jika stok kurang
+                    return redirect()->back()->with('error', 
+                        "Stok ukuran " . strtoupper($ukuran) . " untuk " . $produk->nama_produk . " tidak cukup! (Sisa: " . $produk->$kolom_stok . ")");
                 }
 
-                // 2. Cek ketersediaan stok spesifik
-                if ($produk->$nama_kolom_stok < $qty) {
-                    DB::rollBack();
-                    return redirect()->back()->with('error', 'Stok ukuran ' . strtoupper($ukuran) . ' untuk ' . $produk->nama_produk . ' tidak mencukupi! (Sisa: ' . $produk->$nama_kolom_stok . ')');
-                }
-
-                // 3. Simpan Detail
+                // Simpan Detail
                 DetailPenjualan::create([
                     'id_penjualan' => $penjualan->id,
                     'id_produk' => $id_produk,
-                    'ukuran' => strtoupper($ukuran), // Simpan di DB sebagai uppercase (S, M, L)
+                    'ukuran' => strtoupper($ukuran),
                     'kuantitas' => $qty
                 ]);
 
-                // 4. Kurangi Stok Spesifik
-                $produk->decrement($nama_kolom_stok, $qty);
+                // Kurangi Stok Varian Spesifik
+                $produk->decrement($kolom_stok, $qty);
             }
 
             DB::commit();
@@ -97,8 +94,7 @@ class PenjualanController extends Controller
     
     public function destroy($id)
     {
-        $penjualan = Penjualan::findOrFail($id);
-        $penjualan->delete();
+        Penjualan::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Data berhasil dihapus');
     }
 

@@ -33,8 +33,8 @@ class Penjualan extends Model
     {
         $total = 0;
         foreach ($this->details as $detail) {
-            // Pastikan relasi produk dan kolom harga ada di tabel produk_fashion
-            $harga = $detail->produk->harga ?? 0; 
+            // PERBAIKAN: Gunakan 'harga_jual', bukan 'harga'
+            $harga = $detail->produk->harga_jual ?? 0; 
             $total += ($harga * $detail->kuantitas);
         }
         return $total;
