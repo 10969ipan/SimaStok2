@@ -35,9 +35,9 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         @if($row->gambar)
-                                            <img src="{{ asset('storage/'.$row->gambar) }}" class="rounded border me-2" width="50" height="50" style="object-fit: cover;">
+                                            <img src="{{ asset('storage/'.$row->gambar) }}" class="rounded border me-2" width="200" height="200" style="object-fit: cover;">
                                         @else
-                                            <img src="{{ asset('backend/image/img-default.jpg') }}" class="rounded border me-2" width="50">
+                                            <img src="{{ asset('backend/image/img-default.jpg') }}" class="rounded border me-2" width="200" height="200" style="object-fit: cover;">
                                         @endif
                                         <div>
                                             <span class="fw-bold text-dark">{{ $row->nama_produk }}</span><br>

@@ -45,7 +45,7 @@
                                 <th>Kategori</th>
                                 <th>Nama Produk</th>
                                 <th>Harga</th>
-                                <th>Stok</th>
+                                
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -56,9 +56,9 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     @if ($row->gambar)
-                                        <img src="{{ asset('storage/' . $row->gambar) }}" width="50" class="img-thumbnail">
+                                        <img src="{{ asset('storage/' . $row->gambar) }}" width="200" class="img-thumbnail">
                                     @else
-                                        <img src="{{ asset('backend/image/img-default.jpg') }}" width="50" class="img-thumbnail">
+                                        <img src="{{ asset('backend/image/img-default.jpg') }}" width="200" class="img-thumbnail">
                                     @endif
                                 </td>
                                 <td>{{ $row->sku_code ?? '-' }}</td>
@@ -68,14 +68,7 @@
                                     Beli: Rp {{ number_format($row->harga_beli, 0, ',', '.') }} <br>
                                     <b>Jual: Rp {{ number_format($row->harga_jual, 0, ',', '.') }}</b>
                                 </td>
-                                <td>
-                                    Total: {{ $row->stok_awal }} <br>
-                                    @if(isset($row->stok_xs))
-                                    <small class="text-muted">
-                                        XS:{{$row->stok_xs}}, S:{{$row->stok_s}}, ...
-                                    </small>
-                                    @endif
-                                </td>
+                               
                                 <td>
                                     @if($row->status == 'Active')
                                         <span class="badge bg-success">Aktif</span>

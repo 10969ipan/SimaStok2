@@ -44,10 +44,17 @@
                                         <a href="{{ route('backend.penjualan.show', $row->id) }}" class="btn btn-sm btn-info text-white" title="Lihat Detail">
                                             <i class="fa fa-eye"></i>
                                         </a>
+                                        
+                                        {{-- TAMBAHAN: Tombol Edit --}}
+                                        <a href="{{ route('backend.penjualan.edit', $row->id) }}" class="btn btn-sm btn-primary text-white" title="Edit Transaksi">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+
                                         {{-- Tombol Cetak (Opsional) --}}
                                         <a href="#" class="btn btn-sm btn-warning text-white" title="Cetak Struk">
                                             <i class="fa fa-print"></i>
                                         </a>
+
                                         <form action="{{ route('backend.penjualan.destroy', $row->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus data ini?');">
                                             @csrf
                                             @method('DELETE')
