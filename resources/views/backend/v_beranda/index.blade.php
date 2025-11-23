@@ -104,36 +104,56 @@
     </div>
 </div>
 
+
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Transaksi Penjualan Terakhir</h4>
+                <h4 class="card-title">Aktivitas Terakhir</h4>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Tanggal</th>
-                                <th>Nama Pelanggan</th>
-                                <th>Kasir</th>
-                                <th>Status</th>
+                                <th>Kategori</th>
+                                <th>Nama Item</th>
+                                <th>Keterangan</th> <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($transaksi_terakhir as $row)
+                            @forelse ($aktivitas_terakhir as $row)
                             <tr>
-                                <td class="py-1">{{ $loop->iteration }}</td>
-                                <td>{{ \Carbon\Carbon::parse($row->tgl_penjualan)->format('d M Y') }}</td>
-                                <td>{{ $row->pelanggan->nama_pelanggan ?? '-' }}</td>
-                                <td>{{ $row->user->nama ?? '-' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($row->updated_at)->format('d M Y H:i') }}</td>
+                                
+                                <td>
+                                    @if($row->tipe == 'Produk')
+                                        <label class="badge badge-info">Produk</label>
+                                    @else
+                                        <label class="badge badge-warning">Bahan Baku</label>
+                                    @endif
+                                </td>
+
+                                <td>{{ $row->nama }}</td>
+
+                                <td>
+                                    @if($row->created_at == $row->updated_at)
+                                        <span class="text-primary">
+                                            <i class="mdi mdi-plus-box mr-1"></i> Input Data Baru
+                                        </span>
+                                    @else
+                                        <span class="text-warning">
+                                            <i class="mdi mdi-pencil-box mr-1"></i> Update Data
+                                        </span>
+                                    @endif
+                                </td>
+
                                 <td>
                                     <label class="badge badge-success">Selesai</label>
                                 </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center text-muted">Belum ada data penjualan.</td>
+                                <td colspan="5" class="text-center text-muted">Belum ada aktivitas terbaru.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -143,5 +163,4 @@
         </div>
     </div>
 </div>
-
 @endsection
