@@ -68,5 +68,6 @@ Route::resource('/backend/bahan_baku', BahanBakuController::class, ['as' => 'bac
 Route::get('/backend/laporan', [LaporanController::class, 'index'])->name('backend.laporan.index');
 Route::get('/backend/laporan/cetak-penjualan', [LaporanController::class, 'cetakPenjualan'])->name('backend.laporan.cetak_penjualan');
 Route::get('/backend/laporan/cetak-stok', [LaporanController::class, 'cetakStok'])->name('backend.laporan.cetak_stok');
+Route::get('/backend/laporan/cetak-stok-bahan', [LaporanController::class, 'cetakStokBahan'])->name('backend.laporan.cetak_stok_bahan');
 });
 });

@@ -29,7 +29,7 @@
         @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            
         </div>
         @endif
 
@@ -55,9 +55,9 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     @if ($row->foto)
-                                        <img src="{{ asset('uploads/user/' . $row->foto) }}" width="40" class="rounded-circle">
+                                        <img src="{{ asset('uploads/user/' . $row->foto) }}" width="40" height="40" style="object-fit: cover;" class="rounded-circle">
                                     @else
-                                        <img src="{{ asset('backend/image/img-default.jpg') }}" width="40" class="rounded-circle">
+                                        <img src="{{ asset('backend/image/img-default.jpg') }}" width="40" height="40" style="object-fit: cover;" class="rounded-circle">
                                     @endif
                                 </td>
                                 <td>{{ $row->nama }}</td>

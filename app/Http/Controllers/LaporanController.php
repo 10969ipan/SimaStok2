@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Penjualan;
 use App\Models\Produk;
+use App\Models\BahanBaku;
+use App\Models\ProdukDetail;
+use Carbon\Carbon;
 
 class LaporanController extends Controller
 {
@@ -43,11 +46,22 @@ class LaporanController extends Controller
     // Cetak Laporan Stok Produk
     public function cetakStok()
     {
-        // Ambil semua produk, urutkan stok dari yang terkecil (untuk warning)
-        $data = Produk::orderBy('stok_awal', 'asc')->get();
+        // Ambil semua produk beserta detail-nya (ukuran/warna)
+        // Diurutkan berdasarkan nama produk agar rapi
+        $data = Produk::with('ProdukDetail')->orderBy('nama_produk', 'asc')->get();
 
         return view('backend.v_laporan.cetak_stok', [
-            'judul' => 'Laporan Stok Produk',
+            'judul' => 'Laporan Stok Detail Produk',
+            'data'  => $data
+        ]);
+    }
+    public function cetakStokBahan()
+    {
+        // Ambil data bahan baku beserta suppliernya
+        $data = BahanBaku::with('supplier')->orderBy('stok', 'asc')->get();
+
+        return view('backend.v_laporan.cetak_stok_bahan', [
+            'judul' => 'Laporan Stok Bahan Baku',
             'data'  => $data
         ]);
     }

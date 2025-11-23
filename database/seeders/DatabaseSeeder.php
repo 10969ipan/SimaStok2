@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
             'role' => '1',
             'status' => 1,
             'hp' => '19240432',
-            'password' => bcrypt('stf@'),
+            'password' => bcrypt('user@'),
         ]);
 
         User::create([
@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
             'role' => '1',
             'status' => 1,
             'hp' => '19242131',
-            'password' => bcrypt('stf@'),
+            'password' => bcrypt('user@'),
         ]);
 
         User::create([
@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
             'role' => '1',
             'status' => 1,
             'hp' => '19240750',
-            'password' => bcrypt('stf@'),
+            'password' => bcrypt('user@'),
         ]);
 
         // ==========================
