@@ -35,14 +35,14 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         @if($row->gambar)
-                                            <img src="{{ asset('storage/'.$row->gambar) }}" class="rounded border me-2" width="200" height="200" style="object-fit: cover;">
+                                            <img src="{{ asset('storage/'.$row->gambar) }}" class="rounded border me-2" width="50" height="50" style="object-fit: cover;">
                                         @else
-                                            <img src="{{ asset('backend/image/img-default.jpg') }}" class="rounded border me-2" width="200" height="200" style="object-fit: cover;">
+                                            <img src="{{ asset('backend/image/img-default.jpg') }}" class="rounded border me-2" width="50" height="50" style="object-fit: cover;">
                                         @endif
-                                        <div>
-                                            <span class="fw-bold text-dark">{{ $row->nama_produk }}</span><br>
-                                            <small class="text-muted">{{ $row->bahan ?? '-' }}</small>
-                                        </div>
+                                            <div>
+                                                <span class="fw-bold text-dark">{{ $row->nama_produk }}</span><br>
+                                                <small class="text-muted">{{ $row->bahan ?? '-' }}</small>
+                                            </div>
                                     </div>
                                 </td>
                                 <td>
@@ -70,13 +70,18 @@
                                     @endif
                                 </td>
                                 <td>
+                                    <a href="{{ route('backend.produk_fashion.edit', $row->id) }}" class="btn btn-sm btn-warning" title="Ubah">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+
                                     <form action="{{ route('backend.produk_fashion.destroy', $row->id) }}" method="POST" class="d-inline">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger" title="Hapus" onclick="return confirm('Hapus data ini?')">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </form>
-                                    </td>
+                                </td>
+                                
                             </tr>
                             @endforeach
                         </tbody>
