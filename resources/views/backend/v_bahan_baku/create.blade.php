@@ -54,7 +54,7 @@
                                     <option value="">- Pilih Satuan -</option>
                                     <option value="Meter" {{ old('satuan_unit') == 'Meter' ? 'selected' : '' }}>Meter</option>
                                     <option value="Yard" {{ old('satuan_unit') == 'Yard' ? 'selected' : '' }}>Yard</option>
-                                    <option value="Gulung" {{ old('satuan_unit') == 'Gulung' ? 'selected' : '' }}>Gulung</option>
+                                    <option value="Cons" {{ old('satuan_unit') == 'Cons' ? 'selected' : '' }}>Cons</option>
                                     <option value="Kg" {{ old('satuan_unit') == 'Kg' ? 'selected' : '' }}>Kg</option>
                                     <option value="Pcs" {{ old('satuan_unit') == 'Pcs' ? 'selected' : '' }}>Pcs</option>
                                 </select>
