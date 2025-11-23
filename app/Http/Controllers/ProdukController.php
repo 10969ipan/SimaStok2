@@ -63,6 +63,17 @@ class ProdukController extends Controller
         if ($request->hasFile('gambar')) {
             $validatedData['gambar'] = $request->file('gambar')->store('uploads/produk', 'public');
         }
+        if ($request->has('varian')) {
+        foreach ($request->varian as $item) {
+            // Menggunakan relasi 'details()' untuk create
+            $produk->details()->create([
+                'sku_detail' => $item['sku'],
+                'ukuran'     => $item['ukuran'],
+                'warna'      => $item['warna'],
+                'stok'       => $item['stok'],
+            ]);
+        }
+    }
 
         Produk::create($validatedData);
         return redirect()->route('backend.produk.index')->with('success', 'Produk berhasil ditambahkan');

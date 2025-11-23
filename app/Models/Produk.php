@@ -36,4 +36,15 @@ class Produk extends Model
         'berat',
         'status',
     ];
+
+    public function details()
+    {
+        return $this->hasMany(ProdukDetail::class, 'produk_id', 'id');
+    }
+    
+    // Helper: Menghitung total stok dari semua varian (Opsional)
+    public function getTotalStokAttribute()
+    {
+        return $this->details->sum('stok');
+    }
 }

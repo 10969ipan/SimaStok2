@@ -135,10 +135,7 @@
                                             <a class="nav-link {{ request()->routeIs('backend.produk.index') ? 'active' : '' }}" href="{{ route('backend.produk.index') }}">Produk Utama</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link {{ request()->routeIs('backend.produk_fashion.index') ? 'active' : '' }}" href="{{ route('backend.produk_fashion.index') }}">Produk Fashion</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link {{ request()->routeIs('backend.desain_koleksi.index') ? 'active' : '' }}" href="{{ route('backend.desain_koleksi.index') }}">Desain Koleksi</a>
+                                            <a class="nav-link {{ request()->routeIs('backend.produk_fashion.index') ? 'active' : '' }}" href="{{ route('backend.produk_fashion.index') }}">Produk Detail</a>
                                         </li>
                                     </ul>
                                 </div>
