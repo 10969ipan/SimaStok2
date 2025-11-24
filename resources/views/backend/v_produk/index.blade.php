@@ -38,44 +38,40 @@
                 <div class="table-responsive">
                     <table id="zero_config" class="table table-striped table-bordered table-hover">
                         <thead class="bg-light text-primary">
-                            <tr>
+                            {{-- MODIFIKASI: Menambahkan class text-center --}}
+                            <tr class="text-center"> 
                                 <th>No</th>
                                 <th>Gambar</th>
                                 <th>SKU</th>
                                 <th>Kategori</th>
                                 <th>Nama Produk</th>
-                                <th>Harga</th>
+                                <th>Deskripsi</th>
                                 
-                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($index as $row)
-                            <tr>
+                            {{-- MODIFIKASI: Menambahkan class text-center dan align-middle --}}
+                            <tr class="text-center align-middle"> 
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     @if ($row->gambar)
-                                        <img src="{{ asset('storage/' . $row->gambar) }}" width="200" class="img-thumbnail">
+                                        <img src="{{ asset('storage/' . $row->gambar) }}" width="250" class="img-thumbnail">
                                     @else
-                                        <img src="{{ asset('backend/image/img-default.jpg') }}" width="200" class="img-thumbnail">
+                                        <img src="{{ asset('backend/image/img-default.jpg') }}" width="250" class="img-thumbnail">
                                     @endif
                                 </td>
                                 <td>{{ $row->sku_code ?? '-' }}</td>
                                 <td>{{ $row->kategori }}</td>
                                 <td>{{ $row->nama_produk }}</td>
-                                <td>
-                                    Beli: Rp {{ number_format($row->harga_beli, 0, ',', '.') }} <br>
-                                    <b>Jual: Rp {{ number_format($row->harga_jual, 0, ',', '.') }}</b>
+                                
+                                {{-- Style deskripsi tetap dipertahankan agar wrap text --}}
+                                <td style="max-width: 300px; white-space: normal; word-break: break-word;">
+                                    {{ $row->deskripsi }}
                                 </td>
                                
-                                <td>
-                                    @if($row->status == 'Active')
-                                        <span class="badge bg-success">Aktif</span>
-                                    @else
-                                        <span class="badge bg-secondary">Non-Aktif</span>
-                                    @endif
-                                </td>
+                                
                                 <td>
                                     <a href="{{ route('backend.produk.edit', $row->id) }}" class="btn btn-sm btn-warning text-white" title="Ubah">
                                         <i class="fa fa-edit"></i>

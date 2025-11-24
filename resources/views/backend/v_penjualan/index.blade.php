@@ -50,10 +50,7 @@
                                             <i class="fa fa-edit"></i>
                                         </a>
 
-                                        {{-- Tombol Cetak (Opsional) --}}
-                                        <a href="#" class="btn btn-sm btn-warning text-white" title="Cetak Struk">
-                                            <i class="fa fa-print"></i>
-                                        </a>
+                                        
 
                                         <form action="{{ route('backend.penjualan.destroy', $row->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus data ini?');">
                                             @csrf
