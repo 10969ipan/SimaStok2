@@ -147,9 +147,7 @@
                                 </a>
                                 <div id="submenu-transaksi" class="collapse submenu {{ request()->is('backend/produksi*', 'backend/penjualan*') ? 'show' : '' }}" style="">
                                     <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link {{ request()->routeIs('backend.produksi.index') ? 'active' : '' }}" href="{{ route('backend.produksi.index') }}">Produksi</a>
-                                        </li>
+                                        
                                         <li class="nav-item">
                                             <a class="nav-link {{ request()->routeIs('backend.penjualan.index') ? 'active' : '' }}" href="{{ route('backend.penjualan.index') }}">Penjualan</a>
                                         </li>
