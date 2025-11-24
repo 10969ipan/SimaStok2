@@ -147,6 +147,34 @@ class DatabaseSeeder extends Seeder
             'status'        => 'Active',
         ]);
 
+        Produk::create([
+            'nama_produk'   => 'Kaos Premium Cotton',
+            'sku_code'      => 'KAS-004',
+            'barcode'       => '8901234567892',
+            'kategori'      => 'Kemeja Kasual',
+            'deskripsi'     => 'Kaos berbahan cotton premium, nyaman dipakai untuk kegiatan sehari-hari.',
+            'gambar'        => 'images/produk/kaos2.jpg',
+            'supplier'      => 'NahKie Indonesia',
+            'brand'         => 'Nahkie',
+            'harga_beli'    => 80000,
+            'harga_jual'    => 130000,
+            'stok_awal'     => 60,
+            'min_stok'      => 12,
+            'lokasi_gudang' => 'Gudang A - Rak 4',
+            'stok_xs'       => 6,
+            'stok_s'        => 12,
+            'stok_m'        => 18,
+            'stok_l'        => 12,
+            'stok_xl'       => 8,
+            'stok_xxl'      => 4,
+            'material'      => '100% Cotton',
+            'warna'         => 'Biru',
+            'berat'         => 260,
+            'status'        => 'Active',
+        ]);
+
+        
+
         // ==========================
         // SUPPLIER
         // ==========================

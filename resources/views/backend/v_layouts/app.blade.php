@@ -132,7 +132,7 @@
                                             <a class="nav-link {{ request()->routeIs('backend.kategori.index') ? 'active' : '' }}" href="{{ route('backend.kategori.index') }}">Kategori</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link {{ request()->routeIs('backend.produk.index') ? 'active' : '' }}" href="{{ route('backend.produk.index') }}">Produk Utama</a>
+                                            <a class="nav-link {{ request()->routeIs('backend.produk.index') ? 'active' : '' }}" href="{{ route('backend.produk.index') }}">Produk</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link {{ request()->routeIs('backend.produk_fashion.index') ? 'active' : '' }}" href="{{ route('backend.produk_fashion.index') }}">Produk Detail</a>
